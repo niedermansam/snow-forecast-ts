@@ -1,0 +1,91 @@
+* {
+  font-family: sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+#toolbar {
+  margin: 50px;
+}
+
+#filter-sliders-section {
+  padding: 0px 50px;
+  -webkit-transition: max-height .5s;
+  transition: max-height .5s;
+  max-height: 400px;
+}
+
+.hidden-filters {
+  max-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.checkbox-container {
+  margin-bottom: 50px;
+}
+
+.checkbox-label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.checkbox {
+  cursor: pointer;
+}
+
+td {
+  max-width: 400px;
+  padding: 5px;
+}
+
+.forecast-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.snow-forecast {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: column;
+          flex-flow: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+}
+
+.snow-forecast button {
+  max-width: 200px;
+}
+
+.noUi-horizontal .noUi-tooltip {
+  -webkit-transform: translate(-50%, 210%) !important;
+  transform: translate(-50%, 210%) !important;
+  left: 50%;
+  bottom: 120%;
+}
+
+.noUi-touch-area, .disable-filter, .noUi-handle::before, .noUi-handle::after {
+  cursor: pointer;
+}
+/*# sourceMappingURL=app.css.map */
