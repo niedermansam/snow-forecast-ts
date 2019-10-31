@@ -15,7 +15,7 @@ let resorts = Resorts()
 
 console.log(resorts)
 
-createElement("div", app, {id: 'map', style: "width: 100vw; height: 50vh;"});
+createElement("div", app, {id: 'map'});
 
 export const ResortMap = createMap('map');
 

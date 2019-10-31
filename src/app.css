@@ -2,12 +2,33 @@
   font-family: sans-serif;
 }
 
+#app {
+  display: -ms-grid;
+  display: grid;
+      grid-template-areas: 'toolbar map';
+  -ms-grid-columns: 400px auto;
+      grid-template-columns: 400px auto;
+  -ms-grid-rows: 100vh 100vh;
+      grid-template-rows: 100vh 100vh;
+}
+
 body {
   margin: 0;
 }
 
 #toolbar {
-  margin: 50px;
+  padding: 25px;
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: toolbar;
+  background-color: lightgrey;
+}
+
+#map {
+  height: 100vh;
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: map;
 }
 
 #filter-sliders-section {
@@ -85,7 +106,27 @@ td {
   bottom: 120%;
 }
 
+c
 .noUi-touch-area, .disable-filter, .noUi-handle::before, .noUi-handle::after {
   cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+  #app {
+    display: -ms-grid;
+    display: grid;
+        grid-template-areas: 'map' 'toolbar';
+    -ms-grid-columns: auto;
+        grid-template-columns: auto;
+    -ms-grid-rows: 70vh 30vh;
+        grid-template-rows: 70vh 30vh;
+  }
+  #toolbar {
+    padding: 50px;
+    height: 50vh;
+  }
+  #map {
+    height: 50vh;
+  }
 }
 /*# sourceMappingURL=app.css.map */
