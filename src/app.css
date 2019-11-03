@@ -1,53 +1,234 @@
-* {
-  font-family: sans-serif;
+/* The switch - the box around the slider */
+.switch-container-right {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
 }
 
-#app {
-  display: -ms-grid;
-  display: grid;
-      grid-template-areas: 'toolbar map';
-  -ms-grid-columns: 400px auto;
-      grid-template-columns: 400px auto;
-  -ms-grid-rows: 100vh 100vh;
-      grid-template-rows: 100vh 100vh;
+.switch-container-stretch {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
-body {
-  margin: 0;
+.switch-container-center {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 10px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  background-color: #ccc;
+  -webkit-transition: .3s;
+  transition: .3s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: -1px;
+  bottom: -4px;
+  background: #FFF;
+  -webkit-transition: .3s;
+  transition: .3s;
+  -webkit-box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+          box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+  border: 1px solid #D9D9D9;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #519ed4;
+}
+
+input:focus + .slider {
+  -webkit-box-shadow: 0 0 1px #519ed4;
+          box-shadow: 0 0 1px #519ed4;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+#toolbar::-webkit-scrollbar {
+  width: .5em;
+}
+
+#toolbar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+#toolbar::-webkit-scrollbar-thumb {
+  background-color: #6d6d6d;
+  outline: 1px solid #c9c9c9;
 }
 
 #toolbar {
-  padding: 25px;
-  -ms-grid-row: 1;
-  -ms-grid-column: 1;
-  grid-area: toolbar;
-  background-color: lightgrey;
+  background-color: #c9c9c9;
+  overflow-y: scroll;
+  padding-bottom: 50px;
 }
 
-#map {
-  height: 100vh;
+#toolbar h2 {
+  font-size: 1.3em;
+  margin: 0;
+}
+
+#toolbar h3 {
+  font-size: 1em;
+}
+
+.filter-sliders-section {
+  padding: 0;
+  max-height: 600px;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  overflow: hidden;
+  background: #e2e2e2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: stretch;
+      -ms-flex-pack: stretch;
+          justify-content: stretch;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  border-bottom: 1px solid #a7a7a7;
+  border-top: 1px solid #a7a7a7;
+}
+
+.filter-sliders-section .checkbox-label-container {
+  -webkit-transform: translateX(-15px);
+          transform: translateX(-15px);
+}
+
+.filter-switch-container {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  min-height: 80px;
+  padding: 15px 30px 20px 30px;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  background-color: #e2e2e2;
+  -webkit-transition: min-height .3s;
+  transition: min-height .3s;
+}
+
+.filter-switch-container .filter-switchs-container {
+  display: -ms-grid;
+  display: grid;
+      grid-template-areas: "label switch" "slider" "slider";
+}
+
+.filter-switch-container .filter-switchs-container .noUi-filter-slider {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: slider;
+}
+
+.filter-switch-container .filter-switchs-container .switch {
   -ms-grid-row: 1;
   -ms-grid-column: 2;
-  grid-area: map;
+  grid-area: switch;
 }
 
-#filter-sliders-section {
-  padding: 0px 50px;
-  -webkit-transition: max-height .5s;
-  transition: max-height .5s;
+.filter-switch-container .filter-switchs-container h2, .filter-switch-container .filter-switchs-container h3 {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: label;
+}
+
+.filter-switch-container .slider {
+  -webkit-transform: translateY(3px);
+          transform: translateY(3px);
+}
+
+.filter-switch-container .noUi-base, .filter-switch-container .noUi-connects {
+  margin-right: 20px;
+}
+
+.noUi-filter-slider.hidden, .noUi-filter-slider.hidden > * {
+  opacity: 0;
+  height: 0 !important;
+}
+
+.noUi-filter-slider {
+  opacity: 1;
+  -webkit-transition: opacity .3s, height .3s;
+  transition: opacity .3s, height .3s;
+}
+
+.filter-switch-container.collapsed {
+  min-height: 0;
+}
+
+.options-area {
+  padding: 0 0;
+  background: #e2e2e2;
   max-height: 400px;
+  -webkit-transition: all .4s ease-in-out;
+  transition: all .4s ease-in-out;
+  overflow: hidden;
+  border-bottom: 1px solid #a7a7a7;
+  border-top: 1px solid #a7a7a7;
 }
 
-.hidden-filters {
-  max-height: 0 !important;
-  overflow: hidden !important;
+.option-label {
+  padding: 20px 30px;
+  margin: 0;
+  -webkit-transition: .3s;
+  transition: .3s;
 }
 
-.checkbox-container {
-  margin-bottom: 50px;
+.option-label:hover {
+  background-color: #a7a7a7;
 }
 
-.checkbox-label {
+.filter-sliders-section .option-label {
+  padding: 0;
+}
+
+.options-area.hidden, .filter-sliders-section.hidden-filters {
+  max-height: 0;
+  padding-bottom: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.switch-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -58,10 +239,267 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  padding: 20px 30px;
+  border-bottom: 1px solid #c9c9c9;
 }
 
-.checkbox {
+.switch-container h4, .switch-container h3, .switch-container h2, .switch-container p {
+  margin: 0 0px;
+}
+
+.filter-switch-container {
+  display: -ms-grid;
+  display: grid;
+      grid-template-areas: "label switch" "slider slider";
+}
+
+.filter-switch-container .noUi-filter-slider {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: slider;
+}
+
+.filter-switch-container .switch {
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: switch;
+  justify-self: flex-end;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+}
+
+.filter-switch-container h2, .filter-switch-container h3, .filter-switch-container h4 {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: label;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
+}
+
+.filter-toggle-label-container,
+.menu-header-label-container {
+  background-color: #c9c9c9;
   cursor: pointer;
+}
+
+.filter-toggle-container {
+  margin-bottom: 0;
+}
+
+.option-label, .checkbox {
+  cursor: pointer;
+}
+
+.noUi-handle:focus, .switch input:focus + .slider::before {
+  -webkit-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.05);
+  outline: none;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.noUi-handle, .slider, .slider::before {
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.noUi-handle:hover {
+  -webkit-box-shadow: 0 0 0 7px rgba(0, 0, 0, 0.1) !important;
+          box-shadow: 0 0 0 7px rgba(0, 0, 0, 0.1) !important;
+  -webkit-transition: .3s;
+  transition: .3s;
+  outline: none;
+}
+
+.slider:hover::before {
+  -webkit-box-shadow: 0 0 0 7px rgba(0, 0, 0, 0.1) !important;
+          box-shadow: 0 0 0 7px rgba(0, 0, 0, 0.1) !important;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.noUi-target div {
+  cursor: pointer;
+}
+
+.noUi-touch-area, .disable-filter, .noUi-handle::before, .noUi-handle::after {
+  cursor: pointer;
+}
+
+.noUi-connect {
+  background: #519ed4 !important;
+}
+
+.noUi-connect, .noUi-base, .noUi-target {
+  height: 10px !important;
+}
+
+.noUi-handle {
+  border-radius: 50px !important;
+  width: 24px !important;
+  height: 24px !important;
+  top: -8px !important;
+}
+
+.noUi-handle:before, .noUi-handle:after {
+  display: none !important;
+}
+
+.noUi-filter-slider {
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+}
+
+@media screen and (max-width: 600px) {
+  #toolbar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+  }
+  .filter-toggle-label h2 {
+    margin: 0;
+  }
+  .toolbar-section {
+    width: 49vw;
+  }
+  h2.toolbar-section {
+    display: none;
+  }
+  .switch-container {
+    padding: 20px 20px;
+  }
+  .filter-switch-container {
+    padding: 20px 35px;
+  }
+  .option-label {
+    border: 1px solid #a7a7a7;
+  }
+  .switch-container {
+    border: 1px solid #c9c9c9;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .toolbar-section {
+    width: 100vw;
+  }
+  .filter-switch-container {
+    padding: 20px 40px;
+  }
+}
+
+/* The switch - the box around the slider */
+.switch-container-right {
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.switch-container-stretch {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.switch-container-center {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 10px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  background-color: #ccc;
+  -webkit-transition: .3s;
+  transition: .3s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: -1px;
+  bottom: -4px;
+  background: #FFF;
+  -webkit-transition: .3s;
+  transition: .3s;
+  -webkit-box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+          box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #EBEBEB, 0 3px 6px -3px #BBB;
+  border: 1px solid #D9D9D9;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #519ed4;
+}
+
+input:focus + .slider {
+  -webkit-box-shadow: 0 0 1px #519ed4;
+          box-shadow: 0 0 1px #519ed4;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+#app {
+  font-family: sans-serif;
+  display: -ms-grid;
+  display: grid;
+      grid-template-areas: 'toolbar map';
+  -ms-grid-columns: 250px auto;
+      grid-template-columns: 250px auto;
+  -ms-grid-rows: 100vh 100vh;
+      grid-template-rows: 100vh 100vh;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#toolbar {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: toolbar;
+}
+
+#map {
+  height: 100vh;
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: map;
+  cursor: auto;
+}
+
+body {
+  margin: 0;
 }
 
 td {
@@ -99,34 +537,27 @@ td {
   max-width: 200px;
 }
 
-.noUi-horizontal .noUi-tooltip {
-  -webkit-transform: translate(-50%, 210%) !important;
-  transform: translate(-50%, 210%) !important;
-  left: 50%;
-  bottom: 120%;
-}
-
-c
-.noUi-touch-area, .disable-filter, .noUi-handle::before, .noUi-handle::after {
-  cursor: pointer;
-}
-
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
   #app {
     display: -ms-grid;
     display: grid;
         grid-template-areas: 'map' 'toolbar';
     -ms-grid-columns: auto;
         grid-template-columns: auto;
-    -ms-grid-rows: 70vh 30vh;
-        grid-template-rows: 70vh 30vh;
+    -ms-grid-rows: 65vh 31vh;
+        grid-template-rows: 65vh 31vh;
   }
   #toolbar {
-    padding: 50px;
-    height: 50vh;
+    height: 31vh;
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
+    grid-area: toolbar;
   }
   #map {
-    height: 50vh;
+    height: 65vh;
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+    grid-area: map;
   }
 }
 /*# sourceMappingURL=app.css.map */

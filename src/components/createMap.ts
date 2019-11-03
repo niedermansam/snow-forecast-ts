@@ -3,6 +3,7 @@ import { Feature, Geometry } from "geojson";
 import { appendForecastTable, addForecastToMap, getWeatherForecast } from "./getWeatherForecast";
 import { HandleUrlParameters } from "./helpers";
 import { ResortMap } from "./../index";
+import { Resorts } from "./resorts";
 
 const getBaseMaps = (map:L.Map) => {
     // Import base map
@@ -61,7 +62,8 @@ export const createMap = (id: string) => {
     
     let map = L.map(id)
 
-    map.on('click', async (e) => {
+    map.on('click', async (e:L.LeafletMouseEvent) => {
+        console.log(e)
         let forecast = await getWeatherForecast(e.latlng.lat, e.latlng.lng)
         addForecastToMap(forecast, map)
     })
@@ -78,11 +80,11 @@ export const createMap = (id: string) => {
 
     let params = handleUrl.get()
 
-    let lat = params.lat || 44,
-        lng = params.lng || -118,
-        zoom = params.zoom || 6;
+    let lat = params  && params.lat ? params.lat : 44,
+        lng = params  && params.lng ? params.lng : -118,
+        zoom = params && params.zoom ? params.zoom : 6;
 
-    if(params.forecasts){
+    if(params && params.forecasts){
         params.forecasts.forEach(async (x: number[]) => {
             let forecast = await getWeatherForecast(x[0], x[1]);
             addForecastToMap(forecast, map, false, true)
@@ -133,7 +135,7 @@ export const resortPopups = (feature: Feature<Geometry, any>, layer:L.Layer):voi
 
 export const  resortsLayer = (geoJsonPoint: Feature<Geometry, any>, latlng:L.LatLng) => {
     return L.circleMarker(latlng, {
-        radius: 8.0,
+        radius: 10.0,
         fillColor: '#3C8DBC',
         color: '#000000',
         weight: 1,
@@ -142,7 +144,7 @@ export const  resortsLayer = (geoJsonPoint: Feature<Geometry, any>, latlng:L.Lat
     })
 }
 
-export const addMarkers = (map:L.Map, resorts:any) => {
+export const addMarkers = (map:L.Map, resorts:Resorts) => {
 
     let createMarkers = L.geoJSON(resorts, {pointToLayer: resortsLayer, onEachFeature: resortPopups});
     let resortsFeatureGroup= L.featureGroup();

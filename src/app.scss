@@ -1,52 +1,33 @@
-* {
-    font-family: sans-serif;
-}
-
+@import "./styles/colors";
+@import "./styles/toolbar";
+@import "./styles/switch";
 #app {
-    display: grid;
-    grid-template-areas: 'toolbar map';
     
-  grid-template-columns: 400px auto;
-  grid-template-rows: 100vh 100vh;
+     font-family: sans-serif;
+     display: grid;
+     grid-template-areas: 'toolbar map';
+    
+     grid-template-columns: 250px auto;
+     grid-template-rows: 100vh 100vh;
+     width: 100vw;
+     height: 100vh;
+     overflow: hidden;
+
 }
 
-
-body{
-    margin: 0;
-}
 #toolbar{
-    padding: 25px;
     grid-area:toolbar;
-    background-color:lightgrey;
 }
 
 #map{
     height: 100vh;
     grid-area: map;
+    cursor: auto;
 }
 
-#filter-sliders-section{
-    padding: 0px 50px;
-    transition: max-height .5s;
-    max-height: 400px;
-}
 
-.hidden-filters{
-    max-height: 0!important;
-    overflow: hidden!important;
-}
-
-.checkbox-container{
-    margin-bottom: 50px;
-}
-.checkbox-label {
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.checkbox{
-    cursor: pointer;
+body{
+    margin: 0;
 }
 
 td {
@@ -70,38 +51,27 @@ td {
     }
 }
 
-.noUi-horizontal .noUi-tooltip {
-    -webkit-transform: translate(-50%, 210%) !important;
-    transform: translate(-50%, 210%) !important;
-    left: 50%;
-    bottom: 120%;
-}
-c
 
-.noUi-touch-area, .disable-filter, .noUi-handle::before, .noUi-handle::after{
-    cursor: pointer;
-}
-
-@media screen 
-  and (max-width: 800px)  { 
-      #app {
-    display: grid;
-    grid-template-areas: 
-    'map'
-    'toolbar' ;
-    
-  grid-template-columns: auto;
-  grid-template-rows: 70vh 30vh;
-}
+@media screen and (max-width: 600px)  { 
+    #app {
+        display: grid;
+        grid-template-areas: 
+                            'map'
+                            'toolbar' ;
+        grid-template-columns: auto;
+        grid-template-rows: 65vh 31vh;
+    }
       
-#toolbar{
-    padding: 50px;
-    height: 50vh;
-}
+    #toolbar{
+        height: 31vh;
+        grid-area: toolbar;
+    }
 
-#map{
-    height: 50vh;
-}
+    #map{
+        height: 65vh;
+        grid-area: map;
+    }
+
 }
 
 

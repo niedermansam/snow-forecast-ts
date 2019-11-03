@@ -1,0 +1,274 @@
+@import "colors";
+@import "switch";
+
+#toolbar::-webkit-scrollbar {
+    width: .5em;
+}
+
+#toolbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+#toolbar::-webkit-scrollbar-thumb {
+  background-color: $dark;
+  outline: 1px solid $light;
+}
+
+#toolbar{
+    background-color:$light;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+
+    h2{
+        font-size: 1.3em;
+        margin: 0;
+    }
+    h3{
+        font-size: 1em;
+    }
+}
+
+.filter-sliders-section{
+    padding: 0;
+    max-height: 600px;
+    transition: all .4s ease-in-out;
+    overflow: hidden;
+    background: $lighter;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
+
+
+    border-bottom: 1px solid $base-color;
+    border-top: 1px solid $base-color;
+    .checkbox-label-container{
+       transform: translateX(-15px);
+    }
+}
+
+
+.filter-switch-container {
+  flex-wrap: wrap;
+  min-height: 80px;
+  padding: 15px 30px 20px 30px;
+  align-items: stretch;
+  background-color: $lighter;
+  transition: min-height .3s;
+  .filter-switchs-container{
+    display: grid;
+    grid-template-areas: "label switch"
+                         "slider" "slider";
+    
+    .noUi-filter-slider{
+      grid-area: slider;
+    }
+    .switch{
+        grid-area: switch;
+    }
+    h2,h3{
+        grid-area:label;
+    }
+    
+}
+  .slider{
+    transform: translateY(3px);
+  }
+
+  .noUi-base, .noUi-connects{
+      margin-right: 20px; 
+  }
+}
+
+.noUi-filter-slider.hidden, .noUi-filter-slider.hidden > *{
+    opacity: 0;
+    height: 0 !important;
+}
+.noUi-filter-slider{
+    opacity: 1;
+    transition: opacity .3s, height .3s;
+}
+
+.filter-switch-container.collapsed{
+    min-height: 0;
+}
+
+.options-area {
+    padding: 0 0;
+    background: $lighter;
+    max-height: 400px;
+    transition: all .4s ease-in-out;
+    overflow: hidden;
+    border-bottom: 1px solid $base-color;
+    border-top: 1px solid $base-color;
+}
+
+.option-label{
+    padding: 20px 30px;
+    margin: 0;
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+
+.option-label:hover {
+    background-color: $base-color;
+}
+
+.filter-sliders-section .option-label{
+    padding: 0;
+}
+
+.options-area.hidden,.filter-sliders-section.hidden-filters{
+    max-height: 0;
+    padding-bottom: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.switch-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 30px;
+    h4, h3, h2, p{
+        margin: 0 0px;
+    }
+    border-bottom: 1px solid $light;
+}
+
+.filter-switch-container {
+    
+    display: grid;
+    grid-template-areas: "label switch"
+                         "slider slider";
+    
+    .noUi-filter-slider{
+      grid-area: slider;
+    }
+    .switch{
+        grid-area: switch;
+        justify-self: flex-end;
+        align-self: flex-start;
+    }
+    h2, h3, h4{
+        grid-area: label;
+        align-self: flex-start;
+    }
+}
+
+.filter-toggle-label-container,
+.menu-header-label-container{
+    background-color: $light;
+    cursor: pointer;
+}
+
+.filter-toggle-container {
+    margin-bottom: 0;
+}
+
+
+
+.option-label, .checkbox{
+    cursor: pointer
+}
+
+
+.noUi-handle:focus, .switch input:focus + .slider::before {
+    box-shadow: 0 0 0 10px rgba(0,0,0,.05);
+    outline: none;
+    transition: .3s;
+}
+
+.noUi-handle, .slider, .slider::before {
+    transition: .3s;
+}           
+.noUi-handle:hover{
+    box-shadow: 0 0 0 7px rgba(0,0,0,.1) !important;
+    transition: .3s;
+    outline: none;
+}
+
+
+.slider:hover::before {
+    box-shadow: 0 0 0 7px rgba(0,0,0,.1) !important;
+    transition: .3s;
+}
+
+.noUi-target div {
+    cursor: pointer;
+}
+
+.noUi-touch-area, .disable-filter, .noUi-handle::before, .noUi-handle::after{
+    cursor: pointer;
+}
+
+.noUi-connect{
+    background: $highlight-blue !important;
+}
+
+.noUi-connect, .noUi-base, .noUi-target{
+    height: 10px !important;
+}
+
+.noUi-handle{
+    border-radius: 50px !important;
+    width: 24px!important;
+    height: 24px!important;
+    top: -8px!important;
+}
+
+.noUi-handle:before, .noUi-handle:after {
+    display: none!important;
+}
+
+.noUi-filter-slider{
+    align-self: flex-end;
+}
+
+
+@media screen and (max-width: 600px)  { 
+
+    #toolbar {
+        display: flex;
+        flex-flow: row wrap;
+    }
+    .filter-toggle-label h2 {
+      margin:0;
+    }
+
+    .toolbar-section{
+        width: 49vw;
+    }
+
+    h2.toolbar-section {
+        display: none;
+    }
+
+    .switch-container{
+        padding: 20px 20px;
+    }
+
+    .filter-switch-container{
+        padding: 20px 35px;
+    }
+
+    .option-label{
+        border: 1px solid $base-color;
+    }
+    .switch-container{
+        border: 1px solid $light;
+    }
+    
+
+}
+
+@media screen and (max-width: 450px) { 
+    .toolbar-section{
+        width: 100vw;
+    }
+
+    .filter-switch-container{
+        padding: 20px 40px;
+    }
+}

@@ -91,11 +91,6 @@ export enum TempLabel {
 export const getWeatherForecast = async (lat:number, lng:number) => {
     console.log("fetching forecast location...")
     /*
-    let noaaApiCall = await fetch(`https://api.weather.gov/points/${lat},${lng}`)
-    let noaaApiRespornse = await noaaApiCall.json();
-
-    //console.log(noaaApiRespornse)
-    console.log('fetching forecast...')
     let getNoaaForecast = await fetch(noaaApiRespornse.properties.forecast);
     let forecast = await getNoaaForecast.json();
     */
@@ -109,7 +104,7 @@ export const getWeatherForecast = async (lat:number, lng:number) => {
 
 export const createSnowForecastArray = (forecast: IForecastResponse) => {
     let pattern = /New snow accumulation of (\w|\s)*\./gi;
-    let snowAmountPattern = /(\d+ to \d+)|(around one)|(of less than (\w|\s)+ inch(es)?)/gi
+    let snowAmountPattern = /(\d+ to \d+)|(around (one|an))|(of less than (\w|\s)+ inch(es)?)/gi
 
 
     interface snowForecastArrayElement {
@@ -129,21 +124,15 @@ export const createSnowForecastArray = (forecast: IForecastResponse) => {
         let snowString: string | RegExpMatchArray = forecast.data.text[i].match(pattern);
         snowString = snowString ? snowString.toString() : "No snow expected.";
         let snowAmount: string | string[] | number[] | RegExpMatchArray = snowString.match(snowAmountPattern);
-        console.log(i, snowAmount)
         snowAmount = snowAmount ? snowAmount.toString() : "0 to 0";
 
         snowAmount = snowAmount.replace(/.*one quanter of one/, ' 0 to .25');
         snowAmount = snowAmount.replace(/.*one third of one/, ' 0 to .25');
         snowAmount = snowAmount.replace(/.*(a )?half (an )?inch/, '0 to .5');
-        snowAmount = snowAmount.replace(/.*around one/, '1 to 1');
+        snowAmount = snowAmount.replace(/.*around (an)|(one) inch/, '1 to 1');
         snowAmount = snowAmount.replace(/.*less than one/, '0 to 1');
+        
         snowAmount = snowAmount.replace(/to/, '|');
-
-
-        console.log(i, snowAmount)
-
-
-
 
         snowAmount = snowAmount.replace(/[a-zA-Z]+/g, '');
 
@@ -193,11 +182,11 @@ export const createSnowForecastTable = (forecast: IForecastResponse) => {
 
     let snowForecastArray = createSnowForecastArray(forecast);
 
-    let htmlOutput = createElement('div', undefined, { className: "snow-forecast" });
+    let htmlOutput = createElement({ tag: 'div', parent: undefined, options: { className: "snow-forecast" } });
     
     
     if(snowForecastArray.length == 0){
-        let noSnowMessage = createElement('h3', htmlOutput, { text: '🙁 No snow in the forecast 🙁'})
+        let noSnowMessage = createElement({ tag: 'h3', parent: htmlOutput, options: { text: '🙁 No snow in the forecast 🙁' } })
     } else {
         let maxSnow = Math.floor(snowForecastArray[snowForecastArray.length - 1].cumHigh)
         let snowEmoji = `❄️`.repeat(Math.floor(maxSnow/6) + 1);
@@ -205,19 +194,19 @@ export const createSnowForecastTable = (forecast: IForecastResponse) => {
         let snowMessage:string;
         if (maxSnow <= 2) snowMessage = '❄️ Some flurries are headed this way ❄️'
         else snowMessage = `${snowEmoji} Up to ${maxSnow} inches expected${maxSnow >= 6 ? '!' : ""} ${snowEmoji}`
-        let title = createElement('h3', htmlOutput, { text: snowMessage})
-        let table = createElement('table', htmlOutput);
-        let header = createElement('tr', table);
-        createElement('th', header, { text: "Time" });
-        createElement('th', header, { text: "Snow Forecast" });
-        createElement('th', header, { text: "Cummulative Forecast" });
+        let title = createElement({ tag: 'h3', parent: htmlOutput, options: { text: snowMessage } })
+        let table = createElement({ tag: 'table', parent: htmlOutput });
+        let header = createElement({ tag: 'tr', parent: table });
+        createElement({ tag: 'th', parent: header, options: { text: "Time" } });
+        createElement({ tag: 'th', parent: header, options: { text: "Snow Forecast" } });
+        createElement({ tag: 'th', parent: header, options: { text: "Cummulative Forecast" } });
 
         for(let period of snowForecastArray){
             //console.log(period);
-            let row = createElement('tr', table);
-            createElement('td', row, { text: period.period });
-            createElement('td', row, { text: period.forecast });
-            createElement('td', row, { text: `${period.cumLow} to ${period.cumHigh} inches`.replace('1 to 1', 'Around 1').replace('1 inches', '1 inch') });
+            let row = createElement({ tag: 'tr', parent: table });
+            createElement({ tag: 'td', parent: row, options: { text: period.period } });
+            createElement({ tag: 'td', parent: row, options: { text: period.forecast } });
+            createElement({ tag: 'td', parent: row, options: { text: `${period.cumLow} to ${period.cumHigh} inches`.replace('1 to 1', 'Around 1').replace('2 to 2', 'Around 2').replace('3 to 3', 'Around 3').replace('1 inches', '1 inch') } });
         }
     }
 
@@ -236,7 +225,7 @@ export const addForecastToMap = (data: IForecastResponse, map:L.Map, addToUrl:bo
     */
     let htmlOutput = createSnowForecastTable(data)
 
-    let removeForecast = createElement('button', htmlOutput, { text: "Remove Forecast" });
+    let removeForecast = createElement({ tag: 'button', parent: htmlOutput, options: { text: "Remove Forecast" } });
 
     removeForecast.setAttribute('type', 'button');
 
@@ -271,15 +260,12 @@ export const addForecastToMap = (data: IForecastResponse, map:L.Map, addToUrl:bo
         })
 
     }
-    console.log("unique: ", duplicate)
 
     if (addToUrl && !duplicate) urlControl.addForecast([ptlatlng.lat,ptlatlng.lng])
 
     removeForecast.addEventListener('click', (e) => {
-        //console.log(ptlatlng.map((x:number) => round(x,3)))
         let params = urlControl.get();
         urlControl.removeForecast([round(ptlatlng.lat,2), round(ptlatlng.lng,2)])
-        //console.log('editing ', params.forecasts)
         map.removeLayer(forecastLayer);
     })
 
@@ -289,10 +275,6 @@ export const createFullForecastTable = (data:any) => {
 
     let cumulativeSnowForecast = createSnowForecastTable(data);
 
-    //console.log(cumulativeSnowForecast);
-
-
-    //console.log(forecast.properties.periods);
     let forecastBox = document.getElementById('full-forecast-box')
 
     if(forecastBox) forecastBox.parentNode.removeChild(forecastBox);
@@ -302,33 +284,30 @@ export const createFullForecastTable = (data:any) => {
 
     forecastContainer.appendChild(cumulativeSnowForecast)
 
-    let table = createElement("table", forecastContainer, {id:'detailed-forecast'})
+    let table = createElement({ tag: "table", parent: forecastContainer, options: { id: 'detailed-forecast' } })
 
-    let header = createElement('tr', table)
+    let header = createElement({ tag: 'tr', parent: table })
 
-    createElement('th',header, {text: ""})
-    createElement('th',header, {text: "Temp"})
-    createElement('th',header, {text: "Forecast"})
+    createElement({ tag: 'th', parent: header, options: { text: "" } })
+    createElement({ tag: 'th', parent: header, options: { text: "Temp" } })
+    createElement({ tag: 'th', parent: header, options: { text: "Forecast" } })
     // createElement('th',header, {text: "Wind" })
 
     for(let i  in data.data.period){
 
-        console.log(i, data.time.startPeriodName[i])
-        let row = createElement("tr", table); 
+        //console.log(i, data.time.startPeriodName[i])
+        let row = createElement({ tag: "tr", parent: table }); 
 
-        let name = createElement("td", row, { text: data.time.startPeriodName[i]});
+        let name = createElement({ tag: "td", parent: row, options: { text: data.time.startPeriodName[i] } });
 
-        let temp = createElement('td', row, {text: data.data.temperature[i] + '&deg;F'})
+        let temp = createElement({ tag: 'td', parent: row, options: { text: data.data.temperature[i] + '&deg;F' } })
 
-        let forecast = createElement('td', row, {
-            text: data.data.text[i].replace(/((\w|\s)*?snow.*?\.|(\w|\s)*?wind chill.*?\.|gusts.*?\.)/gi, "<strong>$1</strong>")});
-
-        //let wind = createElement('td', row, { text: `${i.windSpeed} ${i.windDirection}`});
+        let forecast = createElement({
+            tag: 'td', parent: row, options: {
+                text: data.data.text[i].replace(/((\w|\s)*?snow.*?\.|(\w|\s)*?wind chill.*?\.|gusts.*?\.)/gi, "<strong>$1</strong>")
+            }
+            });
     }
-
-    //document.body.appendChild(forecastContainer)
-
-    //  (forecastContainer)
 
     return forecastContainer;
 }
