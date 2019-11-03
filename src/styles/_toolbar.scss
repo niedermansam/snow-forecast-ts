@@ -15,6 +15,9 @@
   outline: 1px solid $light;
 }
 
+.bottom-text{
+}
+
 #toolbar{
     background-color:$light;
     overflow-y: scroll;
@@ -100,15 +103,15 @@
     max-height: 400px;
     transition: all .4s ease-in-out;
     overflow: hidden;
-    border-bottom: 1px solid $base-color;
-    border-top: 1px solid $base-color;
 }
 
 .option-label{
     padding: 20px 30px;
     margin: 0;
-  -webkit-transition: .3s;
-  transition: .3s;
+    -webkit-transition: .3s;
+    transition: .3s;
+    border-bottom: 1px solid $base-color;
+    border-top: 1px solid $base-color;
 }
 
 .option-label:hover {

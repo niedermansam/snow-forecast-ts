@@ -28,6 +28,13 @@ export const createOptions = (parent:HTMLElement) => {
 
     let title = section.createHeader("h2", 'Options', 'options', 'menu-header');
 
+    title.container.self.tabIndex = 0;
+    title.container.self.onkeydown = (e) => {
+        if (e.key === "Enter") well.self.classList.toggle('hidden')
+    }
+
+    console.log(title)
+
     let well = section.createChild({tag: 'div', options: {className: 'options-area'}})
 
     title.container.self.addEventListener('click', (e) => {

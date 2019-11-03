@@ -201,17 +201,25 @@ export class FilterSection extends CreateElement {
     toggleWell() {
         let isHidden = !this.well.self.classList.contains('hidden');
 
-        if (!isHidden) this.well.self.setAttribute('style', "") 
-        
+        if (!isHidden) {
+            this.well.self.setAttribute('style', "")
 
-            
+            setTimeout(() => {
+                this.well.self.classList.toggle('hidden');
 
-        this.well.self.classList.toggle('hidden');
+                this.well.parent.classList.toggle('collapsed')
+            }, 100)
+        
+        }
+        
+        if(isHidden) {
 
-        this.well.parent.classList.toggle('collapsed')
-        
-        if(isHidden)setTimeout(() => { this.well.self.setAttribute('style', "display: none;") }, 500)
-        
+            this.well.self.classList.toggle('hidden');
+
+            this.well.parent.classList.toggle('collapsed')
+
+            setTimeout(() => { this.well.self.setAttribute('style', "display: none") }, 500)
+        }
 
 
         let wellChildren = this.well.self.children as HTMLCollection;

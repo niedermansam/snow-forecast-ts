@@ -202,8 +202,6 @@ input:checked + .slider:before {
   -webkit-transition: all .4s ease-in-out;
   transition: all .4s ease-in-out;
   overflow: hidden;
-  border-bottom: 1px solid #a7a7a7;
-  border-top: 1px solid #a7a7a7;
 }
 
 .option-label {
@@ -211,6 +209,8 @@ input:checked + .slider:before {
   margin: 0;
   -webkit-transition: .3s;
   transition: .3s;
+  border-bottom: 1px solid #a7a7a7;
+  border-top: 1px solid #a7a7a7;
 }
 
 .option-label:hover {
