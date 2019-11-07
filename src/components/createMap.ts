@@ -1,6 +1,6 @@
 import * as L from "leaflet";
 import { Feature, Geometry } from "geojson";
-import { appendForecastTable, addForecastToMap, getWeatherForecast } from "./getWeatherForecast";
+import { handleWeatherData } from "./getWeatherForecast";
 import { HandleUrlParameters } from "./helpers";
 import { ResortMap } from "./../index";
 import { Resorts } from "./resorts";
@@ -23,10 +23,47 @@ let HikeBike = L.tileLayer('http://{s}.tiles.wmflabs.org/hikebike/{z}/{x}/{y}.pn
 let basemaps ={"Esri World Topo Map": WorldTopo,
                 "Esri World Street Map": EsriWorldStreetMap,
               "Open Street Map Hike/Bike": HikeBike}
+              
 
  return basemaps;
 
 }
+
+/* from http://apps.socib.es/Leaflet.TimeDimension/examples/example14.html
+getRadarLayer = (map:L.Map) => {
+
+    var wmsUrl = "https://nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer"
+    var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
+        layers: '1',
+        format: 'image/png',
+        transparent: true,
+        opacity: 0.8,
+        attribution: 'nowCOAST'
+    });
+
+    var proxy = 'server/proxy.php';
+    var testTimeLayer = L.timeDimension.layer.wms(radarWMS, {
+        proxy: proxy,
+        updateTimeDimension: false,
+        wmsVersion: '1.3.0'
+    });
+    testTimeLayer.addTo(map);
+
+    var theLegend = L.control({
+        position: 'topright'
+    });
+
+    theLegend.onAdd = function (map:L) {
+        var src = "https://nowcoast.noaa.gov/images/legends/radar.png";
+        var div = L.DomUtil.create('div', 'info legend');
+        div.style.width = '270px';
+        div.style.height = '50px';
+        div.innerHTML += '<b>Legend</b><br><img src="' + src + '" alt="legend">';
+        return div;
+    };
+    theLegend.addTo(map);
+}
+*/
 
 const getWeatherMaps = (map:L.Map) => {
     let clouds = L.tileLayer('http://{s}.tile.openweathermap.org/map/clouds/{z}/{x}/{y}.png?appid={accessToken}', {
@@ -58,14 +95,14 @@ return weatherMaps;
 
 }
 
-export const createMap = (id: string) => {
+export const createMap = (id: string, forecastHandler: handleWeatherData) => {
     
     let map = L.map(id)
 
     map.on('click', async (e:L.LeafletMouseEvent) => {
         console.log(e)
-        let forecast = await getWeatherForecast(e.latlng.lat, e.latlng.lng)
-        addForecastToMap(forecast, map)
+        let forecast = await forecastHandler.getForecast(e.latlng.lat, e.latlng.lng)
+        forecastHandler.addForecastToMap(forecast, map)
     })
 
     let baseMaps = getBaseMaps(map);
@@ -86,8 +123,8 @@ export const createMap = (id: string) => {
 
     if(params && params.forecasts){
         params.forecasts.forEach(async (x: number[]) => {
-            let forecast = await getWeatherForecast(x[0], x[1]);
-            addForecastToMap(forecast, map, false, true)
+            let forecast = await forecastHandler.getForecast(x[0], x[1]);
+            forecastHandler.addForecastToMap(forecast, map, false, true)
         })
     }
     map.setView([lat, lng], zoom)

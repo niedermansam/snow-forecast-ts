@@ -1,0 +1,33 @@
+@import "./colors";
+@import "./layout";
+
+.menu-icon {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.bar1, .bar2, .bar3 {
+  width: $menu-toggle-width;
+  height: 4px;
+  background-color: $text-blue;
+  margin: 4px 0;
+  transition: 0.4s;
+  border-radius: 2px;
+}
+
+/* Rotate first bar */
+.change .bar1 {
+  -webkit-transform: rotate(-45deg) translate(-8px, 4px) ;
+  transform: rotate(-45deg) translate(-8px, 4px) ;
+}
+
+/* Fade out the second bar */
+.change .bar2 {
+  opacity: 0;
+}
+
+/* Rotate last bar */
+.change .bar3 {
+  -webkit-transform: rotate(45deg) translate(-7px, -4px) ;
+  transform: rotate(45deg) translate(-7px, -4px) ;
+}

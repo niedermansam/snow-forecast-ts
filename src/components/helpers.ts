@@ -61,7 +61,11 @@ export class CreateElement {
         return new CreateElement({ tag, parentElement: this.parent, options })
     }
 
-    createHeader(tag: "p" | "h1" | "h2" | "h3" | "label" = "h3", label: string, name: string, classPrefix: string = 'menu-header', id: string = "") {
+    createHeader(tag: "p" | "h1" | "h2" | "h3" | "label" = "h3", 
+    label: string, name: string, 
+    classPrefix: string = 'menu-header',
+    id: string = "",
+    withSwitch: boolean = false):{container:CreateElement, label: CreateElement, uiSwitch?:any} {
 
         let containerClassNames = classPrefix === 'menu-header' ? "menu-header-container" : `${classPrefix}-container menu-header-container`;
 
@@ -69,12 +73,17 @@ export class CreateElement {
 
         const container = this.createChild({ tag: "div", options: { className: containerClassNames } });
 
-        const elementLabel = container.createChild({ tag: tag, options: { text: label, id: `${name}-label`, className: 'option-label' } })
+        const elementLabel = container.createChild({ tag: tag, options: { text: label, id: `${name}-label`, className: 'option-label' } });
+        
+        if(withSwitch){
+            let uiSwitch = container.createSwitch({ switchOnly: true }).uiSwitch;
+            return { container: container, label: elementLabel, uiSwitch: uiSwitch }
+        }
 
         return { container: container, label: elementLabel };
     }
 
-    createSwitch(leftText?: string, rightText?: string, position?: "left" | "right" | "center" | "stretch", checked?: boolean, className?: string, id?: string, tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "p") {
+    createSwitch({ leftText, rightText, position, checked, className, id, tag, switchOnly = false }: { leftText?: string; rightText?: string; position?: "left" | "right" | "center" | "stretch"; checked?: boolean; className?: string; id?: string; tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "p"; switchOnly?: boolean; } = {}) {
 
         position = position || "left";
         tag = tag || 'h3';
@@ -84,6 +93,22 @@ export class CreateElement {
         let switchClassList = className ? `${className}-switch ${className} switch switch-${position}` : `switch switch-${position}`;
         let containerClassList = switchClassList.replace(/switch/g, 'switch-container')
         let sliderClassList = switchClassList.replace(/switch/g, 'slider')
+
+        if(switchOnly){
+            let uiSwitch = this.createChild({ tag: 'label', options: { className: switchClassList, id: id ? `${id}-switch` : '' } })
+
+            let checkbox = uiSwitch.createChild({ tag: 'input', options: { id: `${id}-checkbox` } }).self as HTMLInputElement;
+            checkbox.type = "checkbox";
+            checkbox.checked = checked;
+            checkbox.onkeydown = (e) => {
+                console.log(e)
+                if (e.key === "Enter") checkbox.checked = !checkbox.checked
+            }
+
+            let slider = uiSwitch.createChild({ tag: 'span', options: { className: sliderClassList, id: id ? `${id}-slider` : '' } });
+
+            return {uiSwitch}
+        }
 
         let container = this.createChild({ tag: 'div', options: { className: containerClassList, id: id ? `${id}-container` : '' }})
 
@@ -107,17 +132,20 @@ export class CreateElement {
 
         if (rightText) rightLabel = container.createChild({ tag: tag, options: { text: rightText } });
 
+        if(switchOnly) return {switch: uiSwitch, checkbox: checkbox};
+
         return {container: container, switch: uiSwitch};
     }
 }
 
 
-interface IHeader {
+export interface IHeader {
     container: CreateElement;
     label: CreateElement;
+    uiSwitch?: any;
 }
 
-interface IFilter {
+export interface IFilter {
     vertical: number[];
     price: number[];
     lifts: number[];
@@ -125,31 +153,35 @@ interface IFilter {
 
 }
 
-interface IFilterStatus {
+export interface IFilterStatus {
     vertical: boolean;
     price: boolean;
     lifts: boolean;
     filters: boolean;
-    [key: string]:boolean
+    numShowing?: number;
+    [key: string]: boolean | number;
 
 }
 
 
-export class FilterSection extends CreateElement {
+export class Toolbar extends CreateElement {
     
 
     parent: HTMLElement;
     headerTag: "p" | "h1" | "h2" | "h3" | "label";
     self: HTMLElement;
     options: createElementOptions;
-    header: IHeader;
+    filterHeader: IHeader;
     markers: L.FeatureGroup;
-    resorts: any;
+    resorts: Resorts;
     filters: IFilter;
     filterStatus: IFilterStatus 
     label: string;
-    well: CreateElement;
+    filterWell: CreateElement;
     name: "vertical" | "price" | "lifts" | "filters";
+    numFiltered: CreateElement;
+    markersHeader: IHeader;
+    markersWell: CreateElement;
     constructor({ markers, resorts, label = "Filters", name = "filters", tag: headerTag = 'h2', parentElement, options }: { tag?: "p" | "h1" | "h2" | "h3" | "label"; parentElement?: HTMLElement; markers?: L.FeatureGroup; label?: string; name?: "vertical" | "price" | "lifts" | "filters"; resorts?:Resorts; options?: createElementOptions } = {}) {
         super({ tag: headerTag, parentElement, options })
         this.parent = parentElement;
@@ -161,26 +193,77 @@ export class FilterSection extends CreateElement {
         this.resorts = resorts;
         this.markers = markers;
         this.filters = { vertical: [0, 5627], price: [0, 155], lifts: [0, 28] };
-        this.filterStatus = { vertical: true, price: true, lifts: true, filters: true };
-        this.header = this.createHeader(this.headerTag, this.label, this.name, 'filter');
-        this.well = this.createChild({ tag: 'div', options: { className: 'options-area' } })
+        this.filterStatus = { vertical: true, price: true, lifts: true, filters: true, markers: true };
+        
+        this.numFiltered = this.createChild({ tag: 'div', options: { className: 'options-area resort-marker-info', style: "font-size: .9em; text-align: center" } }).createChild({ tag: 'p', options: { text: "Resorts showing" } });
+        
+        this.filterHeader = this.createHeader(this.headerTag, this.label, this.name, 'filter', 'filter-header', true);
+        this.filterWell = this.createChild({ tag: 'div', options: { className: 'options-area filters-section' } });
+
+
+        this.markersHeader = this.createHeader(this.headerTag, 'Resort Markers', "markers", "markers", 'markers-header', true)
+        this.markersWell = this.createChild({ tag: 'div', options: { className: 'options-area markers-section' } });
 
         this.createSlider = this.createSlider.bind(this);
         this.refreshMap = this.refreshMap.bind(this);
         this.filterResorts = this.filterResorts.bind(this);
         this.refreshMap = this.refreshMap.bind(this);
         this.toggleWell = this.toggleWell.bind(this);
+        this.openWell = this.openWell.bind(this);
+        this.closeWell = this.closeWell.bind(this);
 
-        this.header.label.self.tabIndex = 0;
-        this.header.label.self.onkeydown = (e) => {
-            if(e.key === "Enter")  this.toggleWell()
+        this.filterHeader.container.self.tabIndex = 0;
+        this.filterHeader.container.self.onkeydown = (e) => {
+            if (e.key === "Enter") this.toggleWell(this.filterWell)
         }
+        this.filterHeader.container.self.addEventListener("click", e => {
+            let element = (e.target as Element)
+            if (element.tagName != "INPUT" && element.tagName != "SPAN" && this.filterStatus.filters){
+                console.log('toggling well...')
+                this.toggleWell(this.filterWell);
+            }
+        })
 
-        console.log(this.filterStatus)
+        this.filterHeader.uiSwitch.self.addEventListener("click", (e: Event) => {
+            let element = (e.target as Element)
+            console.log(e.target)
+            if(element.tagName === "INPUT"){
+                this.filterStatus.filters = !this.filterStatus.filters
+                this.refreshMap()
+                if (this.filterStatus.filters) this.openWell(this.filterWell);
+                else this.closeWell(this.filterWell)
+            }
+        })
+        console.log("UI Switch: ", this.filterHeader.uiSwitch.uiSwitch)
+        
+
+        this.markersHeader.container.self.tabIndex = 0;
+        this.markersHeader.container.self.onkeydown = (e) => {
+            if (e.key === "Enter") this.toggleWell(this.markersWell)
+        }
+        this.markersHeader.container.self.addEventListener("click", e => {
+            let element = (e.target as Element)
+            if (element.tagName != "INPUT" && element.tagName != "SPAN" && this.filterStatus.markers) {
+                console.log('toggling well...')
+                this.toggleWell(this.markersWell);
+            }
+        })
+        this.markersHeader.uiSwitch.self.addEventListener("click", (e: Event) => {
+            let element = (e.target as Element)
+
+            if (element.tagName === "INPUT") {
+                this.filterStatus.markers = !this.filterStatus.markers
+                this.refreshMap()
+                if (this.filterStatus.markers) this.openWell(this.markersWell);
+                else this.closeWell(this.markersWell)
+            }
+        })
+
     }
 
     filterResorts(feature: Feature<Geometry, any>) {
         if (!this.filterStatus.filters) return true;
+        if (!this.filterStatus.markers) return false;
 
         const createFilter = (filterName: string) => {
             let filter = !this.filterStatus[filterName] || // disable if filter is inactive
@@ -198,31 +281,30 @@ export class FilterSection extends CreateElement {
         return vertFilter && priceFilter && liftsFilter;
     }
 
-    toggleWell() {
-        let isHidden = !this.well.self.classList.contains('hidden');
-
+    toggleWell(element:CreateElement) {
+        let isHidden = !element.self.classList.contains('hidden');
         if (!isHidden) {
-            this.well.self.setAttribute('style', "")
+            element.self.setAttribute('style', "")
 
             setTimeout(() => {
-                this.well.self.classList.toggle('hidden');
-
-                this.well.parent.classList.toggle('collapsed')
+                element.self.classList.toggle('hidden');
+                element.parent.classList.toggle('collapsed');
             }, 100)
-        
         }
         
         if(isHidden) {
-
-            this.well.self.classList.toggle('hidden');
-
-            this.well.parent.classList.toggle('collapsed')
-
-            setTimeout(() => { this.well.self.setAttribute('style', "display: none") }, 500)
+            element.self.classList.toggle('hidden');
+            element.parent.classList.toggle('collapsed');
         }
+    }
 
-
-        let wellChildren = this.well.self.children as HTMLCollection;
+    openWell(element: CreateElement) {
+        element.self.classList.remove('hidden');
+        element.parent.classList.remove('collapsed');
+    }
+    closeWell(element: CreateElement) {
+        element.self.classList.add('hidden');
+        element.parent.classList.add('collapsed');
     }
 
     toggleFilterStatus(name: string) {
@@ -242,10 +324,26 @@ export class FilterSection extends CreateElement {
 
         //console.log(this.markers)
         this.markers.addLayer(newMarkers);
+        let filtered = this.resorts.features.filter((value) => {
+            return this.filterResorts(value as Feature)
+        })
+
+        this.numFiltered.self.innerHTML = `Showing <strong>${filtered.length}</strong> of ${this.resorts.features.length} resorts`
+
+    }
+
+    countVisibleResorts(){
+
+        let filtered = this.resorts.features.filter((value) => {
+            return this.filterResorts(value as Feature)
+        })
+
+        return filtered.length
+
     }
 
     createSlider(label: string, name: string, format: wNumb.Instance = wNumb({ decimals: 0 })) {
-        let head = this.well.createSwitch(label, undefined, "stretch", true, "filter");
+        let head = this.filterWell.createSwitch({ leftText: label, rightText: undefined, position: "stretch", checked: true, className: "filter" });
         let filterStatus = this.filterStatus;
         let refresh = this.refreshMap;
 
@@ -264,9 +362,6 @@ export class FilterSection extends CreateElement {
             },
         });
 
-        let refreshMap = this.refreshMap,
-        filters = this.filters;
-
         // Handle slider being deactivated
         head.switch.self.addEventListener('change', e => {
             this.toggleFilterStatus(name);
@@ -283,11 +378,32 @@ export class FilterSection extends CreateElement {
             this.refreshMap();
         })
 
-        slider.on('start', (values, handle) => {
-            
-        })
         return slider;
     
+    }
+
+    createFilters(){
+
+        let vertFormat = wNumb({
+            decimals: 1,
+            postfix: "K",
+            encoder: function (value: number) {
+                return value / 1000;
+            },
+            decoder: function (value: number) {
+                return value * 1000;
+            }
+        })
+
+        let priceSlider = this.createSlider('Price', "price", wNumb({ decimals: 0, prefix: "$" }));
+        let vertSlider = this.createSlider('Vertical Feet', "vertical", vertFormat);
+        let liftSlider = this.createSlider("Lifts", 'lifts', wNumb({ decimals: 0 }));
+
+        return { priceSlider: priceSlider, vertSlider: vertSlider, liftSlider: liftSlider }
+    }
+
+    createMarkerOptions(){
+        this.markersWell.createSwitch({ leftText: "Info on Hover", rightText: undefined, position: "stretch" });
     }
 }
 

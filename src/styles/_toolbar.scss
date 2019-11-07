@@ -1,6 +1,20 @@
 @import "colors";
 @import "switch";
 
+.main-toolbar::-webkit-scrollbar {
+    width: .5em;
+}
+
+.main-toolbar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+.main-toolbar::-webkit-scrollbar-thumb {
+  background-color: $dark;
+  outline: 1px solid $light;
+}
+
 #toolbar::-webkit-scrollbar {
     width: .5em;
 }
@@ -15,13 +29,17 @@
   outline: 1px solid $light;
 }
 
-.bottom-text{
-}
+
 
 #toolbar{
     background-color:$light;
-    overflow-y: scroll;
-    padding-bottom: 50px;
+    overflow: hidden;
+    padding-bottom: 0;
+    color: $darker;
+    display: grid;
+    grid-template-areas: "menu"
+                          "attribution";
+    grid-template-rows: 1fr auto;
 
     h2{
         font-size: 1.3em;
@@ -32,10 +50,42 @@
     }
 }
 
+.main-toolbar{
+    grid-area: menu;
+    overflow-y: scroll;
+}
+
+
+.bottom-text{
+    background-color: $darker-blue;
+    color: $text-blue;
+    width: 230px;
+    display: flex;
+    flex-flow: row wrap;
+    padding: 10px;
+    z-index: 1;
+    grid-area: attribution;
+    position: sticky;
+
+    p::before, p::after{
+        content: ' ❄️ '
+    }
+
+    .snow-flake{
+        display: none;
+    }
+
+    p{
+        margin: 0;
+        font-size: .8em;
+        text-align: center;
+    }
+}
+
 .filter-sliders-section{
     padding: 0;
     max-height: 600px;
-    transition: all .4s ease-in-out;
+    transition: all .4s linear;
     overflow: hidden;
     background: $lighter;
     display: flex;
@@ -54,11 +104,11 @@
 
 .filter-switch-container {
   flex-wrap: wrap;
-  min-height: 80px;
+  min-height: 75px;
   padding: 15px 30px 20px 30px;
   align-items: stretch;
   background-color: $lighter;
-  transition: min-height .3s;
+  transition: min-height .3s linear;
   .filter-switchs-container{
     display: grid;
     grid-template-areas: "label switch"
@@ -87,10 +137,11 @@
 .noUi-filter-slider.hidden, .noUi-filter-slider.hidden > *{
     opacity: 0;
     height: 0 !important;
+    z-index: -1;
 }
 .noUi-filter-slider{
     opacity: 1;
-    transition: opacity .3s, height .3s;
+    transition: opacity .3s linear, height .3s linear;
 }
 
 .filter-switch-container.collapsed{
@@ -99,26 +150,40 @@
 
 .options-area {
     padding: 0 0;
-    background: $lighter;
+    margin-right: 2px;
     max-height: 400px;
-    transition: all .4s ease-in-out;
+    transition: max-height .4s linear;
     overflow: hidden;
 }
 
-.option-label{
+.options-area.markers-section{
+    max-height: 60px;
+    transition: max-height .2s linear;
+}
+
+
+.switch-container{
+    background: $lighter;
+}
+
+.menu-header-container{
     padding: 20px 30px;
     margin: 0;
-    -webkit-transition: .3s;
-    transition: .3s;
-    border-bottom: 1px solid $base-color;
-    border-top: 1px solid $base-color;
+    -webkit-transition: .3s linear;
+    transition: .3s linear;
+    border: 1px solid $base-color;
+    color: $darkest;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.option-label:hover {
-    background-color: $base-color;
+.menu-header-container:hover {
+    box-shadow: 0 0 20px 5px rgba(0,0,0,.2) inset;
 }
 
-.filter-sliders-section .option-label{
+.filter-sliders-section .marker-label{
     padding: 0;
 }
 
@@ -172,7 +237,7 @@
 
 
 
-.option-label, .checkbox{
+.menu-header-container, .checkbox{
     cursor: pointer
 }
 
@@ -180,22 +245,22 @@
 .noUi-handle:focus, .switch input:focus + .slider::before {
     box-shadow: 0 0 0 10px rgba(0,0,0,.05);
     outline: none;
-    transition: .3s;
+    transition: .3s linear;
 }
 
 .noUi-handle, .slider, .slider::before {
-    transition: .3s;
+    transition: .3s linear;
 }           
 .noUi-handle:hover{
     box-shadow: 0 0 0 7px rgba(0,0,0,.1) !important;
-    transition: .3s;
+    transition: .3s linear;
     outline: none;
 }
 
 
 .slider:hover::before {
     box-shadow: 0 0 0 7px rgba(0,0,0,.1) !important;
-    transition: .3s;
+    transition: .3s linear;
 }
 
 .noUi-target div {
@@ -214,6 +279,10 @@
     height: 10px !important;
 }
 
+.noUi-tooltip{
+    z-index: -1;
+}
+
 .noUi-handle{
     border-radius: 50px !important;
     width: 24px!important;
@@ -227,25 +296,96 @@
 
 .noUi-filter-slider{
     align-self: flex-end;
+    width: 170px;
 }
 
 
-@media screen and (max-width: 600px)  { 
+.filter-container{
+    grid-area: filters;
+}
+.markers-container{
+    grid-area: markers;
+}
+.resort-marker-info {
+    grid-area: info;
+    background: $lighter;
+}
 
+h2#markers-label {
+    font-size: 1.1em;
+}
+
+
+
+@media screen and (max-width: 800px)  { 
+
+
+    .options-area {
+        margin-right: 0;
+    }
     #toolbar {
         display: flex;
         flex-flow: row wrap;
+        height: $mobile-toolbar-height;
+        overflow-y: scroll !important;
     }
+
+    #toolbar.hidden{
+        transform: translateY($mobile-toolbar-height);
+    }
+    .main-toolbar{
+        overflow: hidden;
+    }
+
+
     .filter-toggle-label h2 {
       margin:0;
     }
 
-    .toolbar-section{
-        width: 49vw;
+    .filter-container{
+        grid-area: filterHeader;
+    }
+
+    .filter-section{
+        grid-area: filters;
+    }
+
+    .markers-container{
+        grid-area: markerHeader;
+    }
+
+    .markers-section{
+        grid-area: markers;
+    }
+
+    .resort-marker-info {
+        grid-area: info;
+    }
+    .menu-header-container{
+        height: 1rem;
+    }
+
+    .main-toolbar{
+        display: grid;
+        grid-template-areas: "info info"
+                              "filterHeader markerHeader"
+                              "filters markers";
+        grid-template-rows: 45px auto 1fr;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
     }
 
     h2.toolbar-section {
         display: none;
+    }
+    .bottom-text {
+        width: calc(100% - 20px);
+        justify-content: space-evenly;
+        align-items: center;
+        z-index: 1;
+        .snow-flake{
+            display: block;
+        }
     }
 
     .switch-container{
@@ -256,22 +396,25 @@
         padding: 20px 35px;
     }
 
-    .option-label{
-        border: 1px solid $base-color;
-    }
     .switch-container{
         border: 1px solid $light;
     }
-    
-
+    .noUi-filter-slider{
+        width: calc(100% - 5px);
+    }
 }
 
-@media screen and (max-width: 450px) { 
-    .toolbar-section{
-        width: 100vw;
+
+
+@media screen and (max-width: 500px) { 
+    .main-toolbar{
+        display: flex;
+        flex-flow: column nowrap;
     }
+
 
     .filter-switch-container{
         padding: 20px 40px;
     }
+
 }
