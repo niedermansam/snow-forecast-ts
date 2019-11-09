@@ -3,6 +3,7 @@
 @import "./styles/menu-toggle";
 @import "./styles/layout";
 @import "./styles/leaflet";
+@import "./styles/detailed-forecast";
 
 body{
      max-width: 100vw;
@@ -24,29 +25,10 @@ body{
 
 }
 
-.detailed-forecast-overlay{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1000;
-    background-color: rgba(0,0,0,.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.detailed-forecast{
-    width: 80%;
-    z-index: 1000;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: white;
-    text-align: center;
-    h3{
-        margin: 0;
-    }
+
+td, tr{
+    padding: 5px;
 }
 
 #header{
@@ -98,10 +80,6 @@ body{
     margin: 0;
 }
 
-td {
-    max-width: 400px;
-    padding: 5px;
-}
 
 .forecast-box{
     display: flex;
@@ -143,6 +121,7 @@ td {
         height: calc(100vh - $header-height);
         grid-area: map;
     }
+
 
 }
 

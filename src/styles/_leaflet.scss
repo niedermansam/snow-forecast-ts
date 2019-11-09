@@ -33,6 +33,15 @@
         transition: background .2s, color .2s;
         font-weight: bold;
     }
+    button.forecast-details-button{
+        border: 1px solid $highlight-blue;
+        background: $text-blue;
+    }
+    
+    button.remove-forecast-button{
+        border: 1px solid red;
+        background: rgb(255, 208, 208);
+    }
     button.forecast-details-button:hover, button.forecast-details-button:focus{
         background: $highlight-blue;
         color: white;
@@ -69,10 +78,12 @@ a.leaflet-popup-close-button {
     .leaflet-control-attribution{
         margin-left: 0!important;
         margin-bottom: $mobile-toolbar-height !important;
-        transition: margin-bottom .3s linear;
+        opacity: 0;
+        transition: margin-bottom .3s linear, opacity .2s;
     }
     .leaflet-control-attribution.menu-hidden{
         transform: translateY(0);
         margin-bottom: 0 !important;
+        opacity: 1!important;
     }
 }

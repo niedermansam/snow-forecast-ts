@@ -38,6 +38,8 @@
   "author": "",
   "description": "",
   "dependencies": {
+    "@types/d3": "^5.7.2",
+    "d3": "^5.12.0",
     "font-awesome": "^4.7.0",
     "geojson": "^0.5.0",
     "glyphicons": "^0.2.0",
