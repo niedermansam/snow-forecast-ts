@@ -439,7 +439,7 @@ export class handleWeatherData {
 
 
         forecast.data.temperature.forEach((temp, i, arr) => {
-            let offset = i < arr.length / 2 ? eachPct * (i + .5) : eachPct * (i + 1);
+            let offset = i < arr.length / 2 ? eachPct * (i) : eachPct * (i + .5);
             console.log("gradient pct steps:", offset, " by ", eachPct)
             
             gradient.append('stop')
@@ -461,7 +461,7 @@ export class handleWeatherData {
                 .y0((d: any) => this.snowScale(d[1]))
                 .y1((d: any) => this.snowScale(d[2]))
                 .x((d: any) => x(new Date(d[0])))
-                .curve(d3.curveMonotoneX)
+                .curve(d3.curveStepAfter)
                 //.y1((d:any) => y(d[2]))
         )
         svg.append("path")
@@ -472,7 +472,7 @@ export class handleWeatherData {
             .attr("d", d3.line()
                 .x(function (d) { return x(new Date(d[0])) })
                 .y((d) => { return this.snowScale(d[1]) })
-                .curve(d3.curveMonotoneX)
+                .curve(d3.curveStepAfter)
         )
         svg.append("path")
             .datum(highData)
@@ -482,7 +482,7 @@ export class handleWeatherData {
             .attr("d", d3.line()
                 .x(function (d) { return x(new Date(d[0])) })
                 .y((d) => { return this.snowScale(d[1]) })
-                .curve(d3.curveMonotoneX)
+                .curve(d3.curveStepAfter)
             )
 
         return svg;
