@@ -101,7 +101,6 @@ export class CreateElement {
             checkbox.type = "checkbox";
             checkbox.checked = checked;
             checkbox.onkeydown = (e) => {
-                console.log(e)
                 if (e.key === "Enter") checkbox.checked = !checkbox.checked
             }
 
@@ -124,7 +123,6 @@ export class CreateElement {
         checkbox.checked = checked;
 
         checkbox.onkeydown = (e) => {
-            console.log(e)
             if(e.key === "Enter") checkbox.checked = !checkbox.checked
         }
 
@@ -219,14 +217,12 @@ export class Toolbar extends CreateElement {
         this.filterHeader.container.self.addEventListener("click", e => {
             let element = (e.target as Element)
             if (element.tagName != "INPUT" && element.tagName != "SPAN" && this.filterStatus.filters){
-                console.log('toggling well...')
                 this.toggleWell(this.filterWell);
             }
         })
 
         this.filterHeader.uiSwitch.self.addEventListener("click", (e: Event) => {
             let element = (e.target as Element)
-            console.log(e.target)
             if(element.tagName === "INPUT"){
                 this.filterStatus.filters = !this.filterStatus.filters
                 this.refreshMap()
@@ -234,7 +230,6 @@ export class Toolbar extends CreateElement {
                 else this.closeWell(this.filterWell)
             }
         })
-        console.log("UI Switch: ", this.filterHeader.uiSwitch.uiSwitch)
         
 
         this.markersHeader.container.self.tabIndex = 0;
@@ -244,7 +239,6 @@ export class Toolbar extends CreateElement {
         this.markersHeader.container.self.addEventListener("click", e => {
             let element = (e.target as Element)
             if (element.tagName != "INPUT" && element.tagName != "SPAN" && this.filterStatus.markers) {
-                console.log('toggling well...')
                 this.toggleWell(this.markersWell);
             }
         })
@@ -308,7 +302,6 @@ export class Toolbar extends CreateElement {
     }
 
     toggleFilterStatus(name: string) {
-        console.log(name, this.filterStatus[name])
         this.filterStatus[name] = !this.filterStatus[name]
         this.refreshMap()
     }
@@ -450,10 +443,16 @@ export class HandleUrlParameters {
 
         for (let param of search) {
             let keyValueArray = param.split('=')
+            let output: string | number | number[][];
 
-            if (keyValueArray[0] === "forecasts") 
-            keyValueArray[1] = JSON.parse(decodeURIComponent( keyValueArray[1]))
-            params[keyValueArray[0]] = keyValueArray[1];
+            if (keyValueArray[0] === "forecasts") {
+                
+                output = keyValueArray[1].split(';').map(x => x.split(",").map(x => parseFloat(x)))
+                //keyValueArray[1] = JSON.parse(decodeURIComponent( keyValueArray[1]))
+            } else {
+                output = JSON.parse(decodeURIComponent(keyValueArray[1]))
+            }
+            params[keyValueArray[0]] = output;
         }
         
         return params;
@@ -484,7 +483,7 @@ export class HandleUrlParameters {
         if (array) {
             let roundedLatLng = array.map((x: number[]) => x.map((y) => round(y, 3)))
 
-            let encodedForecast = encodeURIComponent(JSON.stringify(roundedLatLng))
+            let encodedForecast = roundedLatLng.map(x =>  x.join(",")).join(';')
 
             output = `&forecasts=${encodedForecast}`
 
