@@ -100,7 +100,6 @@ export const createMap = (id: string, forecastHandler: handleWeatherData) => {
     let map = L.map(id)
 
     map.on('click', async (e:L.LeafletMouseEvent) => {
-        console.log(e)
         let forecast = await forecastHandler.getForecast(e.latlng.lat, e.latlng.lng)
         forecastHandler.addForecastToMap(forecast, map)
     })
@@ -123,7 +122,7 @@ export const createMap = (id: string, forecastHandler: handleWeatherData) => {
 
     if(params && params.forecasts){
         params.forecasts.forEach(async (x: number[]) => {
-            let forecast = await forecastHandler.getForecast(x[0], x[1]);
+            let forecast = await forecastHandler.getForecast(x[0], x[1]).catch(e => console.error);
             forecastHandler.addForecastToMap(forecast, map, false, true)
         })
     }

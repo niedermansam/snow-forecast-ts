@@ -187,7 +187,7 @@ input:checked + .slider:before {
 }
 
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 a.leaflet-popup-close-button {
@@ -220,8 +220,8 @@ a.leaflet-popup-close-button {
   display: flex;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
-      -ms-flex-flow: row wrap;
-          flex-flow: row wrap;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
   text-align: left;
 }
 
@@ -260,10 +260,11 @@ a.leaflet-popup-close-button {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  cursor: pointer;
 }
 
 .weather-info-text {
-  max-width: 40%;
+  max-width: 45%;
 }
 
 .detailed-forecast {
@@ -276,6 +277,21 @@ a.leaflet-popup-close-button {
   background-color: white;
   text-align: center;
   font-family: sans-serif;
+  cursor: auto;
+}
+
+.detailed-forecast button {
+  padding: 5px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0);
+  -webkit-transition: background .2s, color .2s, border .2s;
+  transition: background .2s, color .2s, border .2s;
+  font-weight: bold;
+}
+
+.detailed-forecast button:hover {
+  color: white;
 }
 
 .detailed-forecast table tr:last-child td:first-child {
@@ -316,11 +332,13 @@ a.leaflet-popup-close-button {
   min-height: 400px;
   margin-bottom: 30px;
   margin-right: 40px;
+  min-width: 400px;
 }
 
 .detailed-forecast .weather-graph {
   max-height: 200px;
-  width: 400px;
+  width: 40vw;
+  min-width: 400px;
 }
 
 .detailed-forecast::-webkit-scrollbar {
@@ -338,27 +356,83 @@ a.leaflet-popup-close-button {
   border-radius: 0 10px 10px 0;
 }
 
-@media screen and (min-width: 1200px) and (min-height: 550px) {
-  .weather-graph {
-    max-height: 250px !important;
-    width: 500px !important;
-  }
-  .weather-graph-container {
-    max-height: 500px !important;
-  }
+.weather-info-text {
+  display: -ms-grid;
+  display: grid;
+      grid-template-areas: "period buttons" "table table" "details details";
+  -ms-grid-rows: 60px 90px auto;
+      grid-template-rows: 60px 90px auto;
+  -ms-grid-columns: 150px 1fr;
+      grid-template-columns: 150px 1fr;
+  width: 45%;
+  padding: 20px;
+  -webkit-transition: background .2s, border .2s;
+  transition: background .2s, border .2s;
+  border-radius: 5px;
+  margin-bottom: 65px;
 }
 
-@media screen and (min-width: 1400px) and (min-height: 800px) {
-  .weather-graph {
-    max-height: 300px !important;
-    width: 600px !important;
-  }
-  .weather-graph-container {
-    max-height: 600px !important;
-  }
+.weather-info-text > * {
+  color: rgba(0, 0, 0, 0.8);
 }
 
-@media screen and (max-width: 900px) {
+.snow-message {
+  margin-top: -1em;
+}
+
+.period-name {
+  width: 100%;
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  grid-area: period;
+  margin: 0;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+}
+
+.period-details {
+  margin: 0;
+  -ms-grid-row: 3;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: details;
+}
+
+.period-table {
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-area: table;
+  width: 205px;
+}
+
+.button-area {
+  -ms-grid-row: 1;
+  -ms-grid-column: 2;
+  grid-area: buttons;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.close-modal {
+  cursor: pointer;
+  position: relative;
+  right: -50%;
+  font-size: 2.2em;
+}
+
+@media screen and (max-width: 850px) {
   .detailed-forecast .weather-graph-container {
     -webkit-box-orient: vertical !important;
     -webkit-box-direction: normal !important;
@@ -366,10 +440,65 @@ a.leaflet-popup-close-button {
             flex-flow: column nowrap !important;
     -ms-flex-line-pack: center !important;
         align-content: center !important;
+    -webkit-box-pack: center !important;
+        -ms-flex-pack: center !important;
+            justify-content: center !important;
+    -webkit-box-align: center !important;
+        -ms-flex-align: center !important;
+            align-items: center !important;
+    width: 100%;
   }
   .detailed-forecast .weather-graph {
     max-height: 200px !important;
     width: 400px !important;
+  }
+  .detailed-forecast .weather-display {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: column nowrap;
+            flex-flow: column nowrap;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+  }
+  .detailed-forecast .weather-info-text {
+    max-width: 100%;
+    display: -ms-grid;
+    display: grid;
+        grid-template-areas: "period buttons" "table details";
+    -ms-grid-columns: 205px 1fr;
+        grid-template-columns: 205px 1fr;
+    -ms-grid-rows: auto auto;
+        grid-template-rows: auto auto;
+    width: auto;
+    margin-bottom: auto;
+  }
+  .detailed-forecast .period-name {
+    width: 100%;
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
+    grid-area: period;
+  }
+  .detailed-forecast .period-details {
+    width: 1fr;
+    min-height: 100px;
+    margin: 5px 0 5px 10px;
+    -ms-grid-row: 2;
+    -ms-grid-column: 2;
+    grid-area: details;
+  }
+  .detailed-forecast .period-table {
+    -ms-grid-row: 2;
+    -ms-grid-column: 1;
+    grid-area: table;
+  }
+  .detailed-forecast .button-area {
+    -ms-grid-row: 1;
+    -ms-grid-column: 2;
+    grid-area: buttons;
+    -webkit-box-pack: space-evenly;
+        -ms-flex-pack: space-evenly;
+            justify-content: space-evenly;
   }
 }
 
