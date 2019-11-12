@@ -14,19 +14,27 @@ A weather application built with typescript using data from the National Weather
     - [x] Number of Lifts
 - [x] Create toggle to turn filters off.
 - [x] Create toggle to hide all markers.
+- [x] Add ability to hide toolbar.
 - [ ] Add toggle to switch between tooltips and popups in leaflet.
-- [x] Add ability to hide toolbar
+- [ ] Move basemap control to toolbar.
+- [ ] Move weathermap controls to toolbar.
 
 ### Forecast
 - [x] Get weather forecast on click.
 - [x] Save forecast location and map view in URL (make a view app share/save-able).
-- [x] Add marker on forecast
+- [x] Add marker on forecast.
+- [ ] Handle API errors.
 
 ### Detailed Forecast
 - [x] Create modal.
 - [x] Create new snow graph.
 - [x] Create temperature graph.
-- [ ] Make graphs interactive.
-- [ ] Add "Expected Snow Events" Section
+- [x] Make graphs interactive.
 - [x] Full forecast section.
+- [ ] Add "Expected Snow Events" Section.
 - [ ] Link to forecast Discussion.
+- [ ] Add ability to load hourly forecast.
+
+### Eventually...
+- [ ] Ability to sign in/save forecasts and views.
+- [ ] Add radar layer to map.
