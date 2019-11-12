@@ -1,8 +1,9 @@
+@import './colors';
+
 .weather-display{
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
     text-align: left;
-
 }
 
 .weather-graph {
@@ -33,11 +34,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 
 .weather-info-text{
-    max-width: 40%;
+    max-width: 45%;
 }
 
 
@@ -51,6 +53,21 @@
     background-color: white;
     text-align: center;
     font-family: sans-serif;
+    cursor: auto;
+
+    button{
+        padding: 5px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        background-color: rgba(0,0,0,0);
+        transition: background .2s, color .2s, border .2s;
+        font-weight: bold;
+    }
+
+    button:hover{
+        color: white;
+    }
+
     table tr:last-child td:first-child {
         border-bottom-left-radius: 10px;
     }
@@ -79,10 +96,12 @@
         min-height: 400px;
         margin-bottom: 30px;
         margin-right: 40px;
+        min-width: 400px;
     }
     .weather-graph{
         max-height: 200px;
-        width: 400px;
+        width: 40vw;
+        min-width: 400px;
     }
 
 }
@@ -102,43 +121,99 @@
   border-radius: 0 10px 10px 0;
 }
 
-@media screen and (min-width: 1200px) and (min-height: 550px){
-
-    .weather-graph{
-        max-height: 250px !important;
-        width: 500px !important;
-    }
-
-    .weather-graph-container{
-        max-height: 500px !important;
-    }
-
+.weather-info-text{
+    display: grid;
+    grid-template-areas: "period buttons"
+                    "table table"
+                    "details details";
+    grid-template-rows: 60px 90px auto;
+    grid-template-columns: 150px 1fr;
+    width: 45%;
+    padding: 20px;
+    transition: background .2s, border .2s;
+    border-radius: 5px;
+    margin-bottom: 65px;
 }
 
-@media screen and (min-width: 1400px) and (min-height: 800px){
-
-    .weather-graph{
-        max-height: 300px !important;
-        width: 600px !important;
-    }
-
-    .weather-graph-container{
-        max-height: 600px !important;
-    }
-
+.weather-info-text > * {
+    color: rgba(0,0,0,.8);
+}
+.snow-message{
+    margin-top: -1em;
+}
+.period-name{
+    width: 100%;
+    grid-area: period;
+    margin: 0;
+    align-self: center;
+}
+.period-details{
+    margin: 0;
+    grid-area: details;
+}
+.period-table{
+    grid-area: table;
+    width: 205px;
+}
+.button-area{
+    grid-area: buttons;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
 }
 
+.close-modal{
+    cursor: pointer;
+    position: relative;
+    right: -50%;
+    font-size: 2.2em;
+}
 
-@media screen and (max-width: 900px){
+@media screen and (max-width: 850px){
     
     .detailed-forecast{
         .weather-graph-container{
             flex-flow: column nowrap !important;
             align-content: center !important;
+            justify-content: center!important;
+            align-items: center!important;
+            width: 100%;
         }
         .weather-graph{
             max-height: 200px !important;
             width: 400px !important;
+        }
+        .weather-display{
+            flex-flow: column nowrap;
+            justify-content: center;
+        }
+        .weather-info-text{
+            max-width: 100%;
+            display: grid;
+            grid-template-areas: "period buttons"
+                            "table details";
+            grid-template-columns: 205px 1fr;
+            grid-template-rows: auto auto;
+            width: auto;
+            margin-bottom: auto;
+        }
+        .period-name{
+            width: 100%;
+            grid-area: period;
+        }
+        .period-details{
+            width: 1fr;
+            min-height: 100px;
+            margin: 5px 0 5px 10px;
+            grid-area: details;
+        }
+        .period-table{
+            grid-area: table;
+        }
+        .button-area{
+            grid-area: buttons;
+            justify-content: space-evenly;
         }
     }
 }
