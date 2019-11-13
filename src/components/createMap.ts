@@ -4,6 +4,7 @@ import { handleWeatherData } from "./getWeatherForecast";
 import { HandleUrlParameters } from "./helpers";
 import { ResortMap } from "./../index";
 import { Resorts } from "./resorts";
+import { SnotelData } from "./getSnoTel";
 
 const getBaseMaps = (map:L.Map) => {
     // Import base map
@@ -100,8 +101,8 @@ export const createMap = (id: string, forecastHandler: handleWeatherData) => {
     let map = L.map(id)
 
     map.on('click', async (e:L.LeafletMouseEvent) => {
-        let forecast = await forecastHandler.getForecast(e.latlng.lat, e.latlng.lng)
-        forecastHandler.addForecastToMap(forecast, map)
+        let forecast = await forecastHandler.getForecast(e.latlng.lat, e.latlng.lng);
+        forecastHandler.addForecastToMap(forecast, map);
     })
 
     let baseMaps = getBaseMaps(map);
@@ -124,6 +125,7 @@ export const createMap = (id: string, forecastHandler: handleWeatherData) => {
         params.forecasts.forEach(async (x: number[]) => {
             let forecast = await forecastHandler.getForecast(x[0], x[1]).catch(e => console.error);
             forecastHandler.addForecastToMap(forecast, map, false, true)
+            map.stop()
         })
     }
     map.setView([lat, lng], zoom)

@@ -56,7 +56,8 @@
     cursor: auto;
 
     button{
-        padding: 5px 20px;
+        padding: 5px 0;
+        width: 100px;
         cursor: pointer;
         border-radius: 5px;
         background-color: rgba(0,0,0,0);
@@ -87,7 +88,8 @@
     h3{
         margin-top: 0;
     }
-
+    
+}
     .weather-graph-container{
         display: flex;
         flex-flow: column wrap;
@@ -96,15 +98,13 @@
         min-height: 400px;
         margin-bottom: 30px;
         margin-right: 40px;
-        min-width: 400px;
     }
     .weather-graph{
         max-height: 200px;
         width: 40vw;
-        min-width: 400px;
+        min-width: 300px;
     }
 
-}
 
 .detailed-forecast::-webkit-scrollbar {
     width: .5em;
@@ -167,22 +167,29 @@
     cursor: pointer;
     position: relative;
     right: -50%;
+    top: -12px;
     font-size: 2.2em;
+    color: rgb(94,94,94);
 }
 
 @media screen and (max-width: 850px){
     
-    .detailed-forecast{
+        .close-modal{
+            top: -10px;
+        }
+    
         .weather-graph-container{
             flex-flow: column nowrap !important;
             align-content: center !important;
             justify-content: center!important;
             align-items: center!important;
             width: 100%;
+            /*max-height: 375px; */
         }
         .weather-graph{
-            max-height: 200px !important;
-            width: 400px !important;
+            max-height: 200px !important; /*175px !important;*/
+            width: 100%;
+            min-width: 250px;
         }
         .weather-display{
             flex-flow: column nowrap;
@@ -194,7 +201,7 @@
             grid-template-areas: "period buttons"
                             "table details";
             grid-template-columns: 205px 1fr;
-            grid-template-rows: auto auto;
+            grid-template-rows:  60px auto;
             width: auto;
             margin-bottom: auto;
         }
@@ -215,5 +222,34 @@
             grid-area: buttons;
             justify-content: space-evenly;
         }
+}
+
+
+@media screen and (max-width: 550px){
+    
+    .close-modal{
+        top: -20px;
+    }
+
+    .detailed-forecast {
+        padding: 20px;
+        overflow-x: hidden;
+    }
+    .weather-info-text{
+        max-width: 100%;
+        display: grid;
+        grid-template-areas: "period buttons"
+                             "table table"
+                             "details details";
+        grid-template-columns: 100px auto;
+        grid-template-rows: 60px auto auto;
+    }
+    .period-details{
+        margin: 0;
+    }
+
+    .period-table{
+        margin: 10px 0;
+        justify-self: center;
     }
 }

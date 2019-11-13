@@ -39,7 +39,8 @@
     display: grid;
     grid-template-areas: "menu"
                           "attribution";
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr auto;    
+    box-shadow: 0 0 40px 10px rgba(0,0,0,.4);
 
     h2{
         font-size: 1.3em;
@@ -325,6 +326,7 @@ h2#markers-label {
     }
     #toolbar {
         display: flex;
+        border-top: 1px solid $darker;
         flex-flow: row wrap;
         height: $mobile-toolbar-height;
         overflow-y: scroll !important;
@@ -411,7 +413,6 @@ h2#markers-label {
         display: flex;
         flex-flow: column nowrap;
     }
-
 
     .filter-switch-container{
         padding: 20px 40px;

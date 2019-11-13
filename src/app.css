@@ -281,7 +281,8 @@ a.leaflet-popup-close-button {
 }
 
 .detailed-forecast button {
-  padding: 5px 20px;
+  padding: 5px 0;
+  width: 100px;
   cursor: pointer;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0);
@@ -317,7 +318,7 @@ a.leaflet-popup-close-button {
   margin-top: 0;
 }
 
-.detailed-forecast .weather-graph-container {
+.weather-graph-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -332,13 +333,12 @@ a.leaflet-popup-close-button {
   min-height: 400px;
   margin-bottom: 30px;
   margin-right: 40px;
-  min-width: 400px;
 }
 
-.detailed-forecast .weather-graph {
+.weather-graph {
   max-height: 200px;
   width: 40vw;
-  min-width: 400px;
+  min-width: 300px;
 }
 
 .detailed-forecast::-webkit-scrollbar {
@@ -429,11 +429,16 @@ a.leaflet-popup-close-button {
   cursor: pointer;
   position: relative;
   right: -50%;
+  top: -12px;
   font-size: 2.2em;
+  color: #5e5e5e;
 }
 
 @media screen and (max-width: 850px) {
-  .detailed-forecast .weather-graph-container {
+  .close-modal {
+    top: -10px;
+  }
+  .weather-graph-container {
     -webkit-box-orient: vertical !important;
     -webkit-box-direction: normal !important;
         -ms-flex-flow: column nowrap !important;
@@ -447,12 +452,15 @@ a.leaflet-popup-close-button {
         -ms-flex-align: center !important;
             align-items: center !important;
     width: 100%;
+    /*max-height: 375px; */
   }
-  .detailed-forecast .weather-graph {
+  .weather-graph {
     max-height: 200px !important;
-    width: 400px !important;
+    /*175px !important;*/
+    width: 100%;
+    min-width: 250px;
   }
-  .detailed-forecast .weather-display {
+  .weather-display {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
         -ms-flex-flow: column nowrap;
@@ -461,25 +469,25 @@ a.leaflet-popup-close-button {
         -ms-flex-pack: center;
             justify-content: center;
   }
-  .detailed-forecast .weather-info-text {
+  .weather-info-text {
     max-width: 100%;
     display: -ms-grid;
     display: grid;
         grid-template-areas: "period buttons" "table details";
     -ms-grid-columns: 205px 1fr;
         grid-template-columns: 205px 1fr;
-    -ms-grid-rows: auto auto;
-        grid-template-rows: auto auto;
+    -ms-grid-rows: 60px auto;
+        grid-template-rows: 60px auto;
     width: auto;
     margin-bottom: auto;
   }
-  .detailed-forecast .period-name {
+  .period-name {
     width: 100%;
     -ms-grid-row: 1;
     -ms-grid-column: 1;
     grid-area: period;
   }
-  .detailed-forecast .period-details {
+  .period-details {
     width: 1fr;
     min-height: 100px;
     margin: 5px 0 5px 10px;
@@ -487,18 +495,46 @@ a.leaflet-popup-close-button {
     -ms-grid-column: 2;
     grid-area: details;
   }
-  .detailed-forecast .period-table {
+  .period-table {
     -ms-grid-row: 2;
     -ms-grid-column: 1;
     grid-area: table;
   }
-  .detailed-forecast .button-area {
+  .button-area {
     -ms-grid-row: 1;
     -ms-grid-column: 2;
     grid-area: buttons;
     -webkit-box-pack: space-evenly;
         -ms-flex-pack: space-evenly;
             justify-content: space-evenly;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .close-modal {
+    top: -20px;
+  }
+  .detailed-forecast {
+    padding: 20px;
+    overflow-x: hidden;
+  }
+  .weather-info-text {
+    max-width: 100%;
+    display: -ms-grid;
+    display: grid;
+        grid-template-areas: "period buttons" "table table" "details details";
+    -ms-grid-columns: 100px auto;
+        grid-template-columns: 100px auto;
+    -ms-grid-rows: 60px auto auto;
+        grid-template-rows: 60px auto auto;
+  }
+  .period-details {
+    margin: 0;
+  }
+  .period-table {
+    margin: 10px 0;
+    -ms-grid-column-align: center;
+        justify-self: center;
   }
 }
 
@@ -741,6 +777,8 @@ input:checked + .slider:before {
       grid-template-areas: "menu" "attribution";
   -ms-grid-rows: 1fr auto;
       grid-template-rows: 1fr auto;
+  -webkit-box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 0 40px 10px rgba(0, 0, 0, 0.4);
 }
 
 #toolbar h2 {
@@ -1095,6 +1133,7 @@ h2#markers-label {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    border-top: 1px solid #494949;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
         -ms-flex-flow: row wrap;

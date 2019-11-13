@@ -98,9 +98,16 @@ export class handleWeatherData {
     
     margin = { top: 10, right: 10, bottom: 40, left: 55 };
     height = 200 - this.margin.bottom;
-    width = Math.max(400, window.innerWidth * .4 );
-    updateGraphSize() {
-        this.width = Math.max(400, window.innerWidth * .4);
+    width = Math.max(250, window.innerWidth * .4 );
+    updateGraphSize(parent?:HTMLElement) {
+        if(parent){
+             this.width = parent.getBoundingClientRect().width;
+             this.height = parent.getBoundingClientRect().height / 2.5;
+            }
+        else {
+            this.width = Math.max(250, window.innerWidth * .4);
+            this.height = 200 - this.margin.bottom;
+        }
     }
 
     tempScale = d3.scaleLinear();
@@ -404,7 +411,7 @@ export class handleWeatherData {
             colorScale = this.colorScale;
 
         const drawGraphs = () => {
-            this.updateGraphSize();
+            this.updateGraphSize(graphsContainer.self);
 
             let timeScale = this.timeScale(timeArr[0], timeArr[timeArr.length - 1]);
             snowgraph.remove();
@@ -514,8 +521,6 @@ export class handleWeatherData {
             tempGraph.on('mouseout touchout', removeTooltips);
         }
 
-        drawGraphs();
-
         window.addEventListener('resize', () => {
             snowgraph.remove();
             tempGraph.remove();
@@ -564,9 +569,15 @@ export class handleWeatherData {
             createElement({ tag: 'td', parent: row, options: { text: forecastDetails } });
         }
 
-        return htmlOutput;
+        document.body.appendChild(htmlOutput)
+        this.updateGraphSize(graphsContainer.self)
+        
+        drawGraphs();
+
+        return { popup: htmlOutput, resize: this.updateGraphSize(graphsContainer.self)};
 
     }
+
 
     addForecastToMap(data: IForecastResponse, map: L.Map, addToUrl: boolean = true, addPopup: boolean = true) {
 
@@ -590,7 +601,6 @@ export class handleWeatherData {
 
         moreDetails.addEventListener('click', e => {
             let detailedForecast = this.detailedForecastTable(data)
-            document.body.appendChild(detailedForecast)
         })
 
 
@@ -624,6 +634,8 @@ export class handleWeatherData {
             forecastLayer.addTo(map);
 
             map.openPopup(forecastPopup);
+
+            map.stop();
 
             htmlOutput.parentNode.parentNode.addEventListener('click', () => {
                 forecastPopup.bringToFront();
@@ -730,17 +742,18 @@ export class handleWeatherData {
             .attr("stop-color", this.colorScale(this.tempScale.invert(this.height)))
             .attr("stop-opacity", 1);
 
-
-        svg.append("path")
-            .datum(allData)
-            .attr("fill", "none")
-            .attr("stroke", "grey")
-            .attr("stroke-width", 1)
-            .attr("d", d3.line()
-                .x((d) => xScale(new Date(d[0])))
-                .y((d) => this.tempScale(32))
-                .curve(d3.curveCatmullRom)
-            )
+        if(minTemp < 32 && maxTemp > 32){
+            svg.append("path")
+                .datum(allData)
+                .attr("fill", "none")
+                .attr("stroke", "grey")
+                .attr("stroke-width", 1)
+                .attr("d", d3.line()
+                    .x((d) => xScale(new Date(d[0])))
+                    .y((d) => this.tempScale(32))
+                    .curve(d3.curveCatmullRom)
+                )
+        }
 
         svg.append("path")
             .datum(allData)
@@ -939,7 +952,7 @@ export class handleWeatherData {
         let forecastContainer = document.createElement("div")
         forecastContainer.setAttribute('id', "full-forecast-box")
 
-        forecastContainer.appendChild(cumulativeSnowForecast)
+        forecastContainer.appendChild(cumulativeSnowForecast.popup)
 
         let table = createElement({ tag: "table", parent: forecastContainer, options: { id: 'detailed-forecast' } })
 

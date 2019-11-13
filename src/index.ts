@@ -10,6 +10,7 @@ import Resorts from "./components/resorts";
 import * as L from 'leaflet';
 import { handleWeatherData } from './components/getWeatherForecast';
 import * as wNumb from 'wnumb';
+import { SnotelData } from './components/getSnoTel';
 
 const app = document.getElementById('app')
 let resorts = Resorts()
