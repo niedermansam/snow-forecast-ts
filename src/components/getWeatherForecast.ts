@@ -146,11 +146,18 @@ export class handleWeatherData {
         let getNoaaForecast = await fetch(noaaApiRespornse.properties.forecast);
         let forecast = await getNoaaForecast.json();
         */
-        let getNoaaForecast = await fetch(`https://forecast.weather.gov/MapClick.php?lon=${lng}&lat=${lat}&FcstType=json`);
+        let response = await fetch(`https://forecast.weather.gov/MapClick.php?lon=${lng}&lat=${lat}&FcstType=json`);
+
+        console.log(response)
 
         // console.log(getNoaaForecast)
-        let forecast = await getNoaaForecast.json();
-
+        if(response.status == 200){
+            let forecast = await response.json();
+            console.log("Production Forecast: ", forecast)
+            return forecast;
+        } else {
+            console.log(response)
+        }
         // let forecastDiscussionCall = await fetch(`https://forecast.weather.gov/product.php?site=NWS&issuedby=SGX&product=AFD&format=TXT&version=1&glossary=1`)
         //let forecastDisc = await forecastDiscussionCall.json();
 
@@ -160,9 +167,6 @@ export class handleWeatherData {
 
 
         //console.log("Dev API response: ", noaaDevApiResponse)
-        console.log("Production Forecast: ", forecast)
-
-        return forecast;
     }
 
     parseSnowData(forecast: IForecastResponse) {
@@ -234,15 +238,18 @@ export class handleWeatherData {
         let snowForecastArray = this.parseSnowData(forecast);
         let htmlOutput = createElement({ tag: 'div', parent: undefined, options: { className: "snow-forecast" } });
         let snowMessage: string;
+        let snowIcons: string;
 
         if (snowForecastArray[snowForecastArray.length - 1].cumHigh === 0) {
-            snowMessage = '🙁 No snow in the forecast 🙁';
+            snowMessage = `No snow in the forecast 🙁`;
+
         } else {
             let maxSnow = Math.floor(snowForecastArray[snowForecastArray.length - 1].cumHigh)
             let minSnow = Math.floor(snowForecastArray[snowForecastArray.length - 1].cumLow)
-            let snowEmoji = `❄️`.repeat(Math.floor(maxSnow / 6) + 1);
+            let numSnowflakes = Math.floor(maxSnow / 6) + 1;
+            snowIcons = `<i class='fas fa-snowflake' style="font-size: 20px; margin: 0 5px; color: blue;"></i>`.repeat(numSnowflakes);
             
-            snowMessage = `${snowEmoji} ${minSnow}-${maxSnow} inches expected${maxSnow >= 6 ? '!' : ""} ${snowEmoji}`
+            snowMessage = `${snowIcons}${numSnowflakes <= 1 ? '' : '<br/>'}${minSnow}-${maxSnow} inches expected${maxSnow >= 6 ? '!' : ""}`
         }
 
         snowMessage = snowMessage
@@ -250,15 +257,30 @@ export class handleWeatherData {
             .replace('2-2', "Around 2")
             .replace('0-0 inches', "Some flurries")
             .replace(/0-(\d)\1 inch(es)?/, "Up to $1 inches")
-            .replace('1 inches', '1 inch')
+            .replace('Around 1 inches', '~1 inch')
 
-        let highTemp = Math.max(...forecast.data.temperature.map(x => parseInt(x)))
+        createElement({ tag: 'h3', parent: htmlOutput, options: { text: snowMessage, style: "font-size: .9rem; margin: 5px 5px 0 5px;" } })
 
-        createElement({tag: 'h3', parent: htmlOutput, options: {text: snowMessage, style: "font-size: .9rem; margin: 5px 5px 0 5px;"}})
-        createElement({ tag: 'p', parent: htmlOutput, options: { text: `<strong>High of ${highTemp}&deg;F at ${forecast.location.elevation} ft.</strong>`, style: "font-size: .9rem; margin: 0 0 5px 0;" } })
+        let highTemp = Math.max(...forecast.data.temperature.map(x => parseInt(x)));
+
+        let faIcon = this.getTemperatureIcon(highTemp)
+
+        let tempColor = this.colorScale(highTemp)
+        createElement({ tag: 'p', parent: htmlOutput, options: { text: `<strong>${faIcon} High of ${highTemp}&deg;F at ${forecast.location.elevation} ft.</strong>`, style: `font-size: .9rem; margin: 0 0 5px 0; color:${tempColor} `} })
         
 
         return htmlOutput;
+
+    }
+
+    getTemperatureIcon(temp: number) {
+        let faIcon: string; // = ['empty', 'quarter', 'half', 'three-quarters', 'full'];
+
+        faIcon = temp <= 10 ? 'empty' : temp <= 32 ? 'quarter' : temp <= 40 ? 'half' : temp <= 60 ? 'three-quarters' : 'full';
+        
+        faIcon = `<i class="fas fa-thermometer-${faIcon}" style = "font-size: 20px" > </i>`
+
+        return faIcon;
 
     }
 
@@ -266,35 +288,50 @@ export class handleWeatherData {
 
         let snowForecastArray = this.parseSnowData(forecast);
 
-        let htmlOutput = createElement({ tag: 'div', parent: undefined, options: { className: "detailed-forecast-overlay" } });
+        let htmlOutput = createElement({ tag: 'div', parent: undefined, options: { className: "detailed-forecast-overlay modal-overlay" } });
 
         htmlOutput.addEventListener('click', e => {
             let elem = e.target as HTMLElement;
-            if (elem.classList.contains('detailed-forecast-overlay')) htmlOutput.remove()
+            if (elem.classList.contains('modal-overlay')) htmlOutput.remove()
         })
 
-        let modal = createElement({ tag: 'div', parent: htmlOutput, options: { className: "detailed-forecast" } });
+        let modal = createElement({ tag: 'div', parent: htmlOutput, options: { className: "detailed-forecast modal" } });
         let close = createElement({ tag: 'span', parent: modal, options: { text: "×", className: "close-modal"}});
         close.addEventListener('click', e => {
             htmlOutput.remove()
         })
         let snowMessage: string;
+        let snowIcons: string;
 
         let lastForecast = snowForecastArray[snowForecastArray.length - 1];
-
         if (lastForecast.cumHigh === 0) {
-            snowMessage = '🙁 No snow in the forecast 🙁';
+            snowMessage = `No snow in the forecast 🙁`;
+
         } else {
-            let maxSnow = Math.floor(lastForecast.cumHigh);
-            let snowEmoji = `❄️`.repeat(Math.floor(maxSnow / 6) + 1);
-            if (maxSnow <= 2) snowMessage = '❄️ Some flurries are headed this way ❄️';
-            else snowMessage = `${snowEmoji} Up to ${maxSnow} inches expected${maxSnow >= 6 ? '!' : ""} ${snowEmoji}`;
+            let maxSnow = Math.floor(lastForecast.cumHigh)
+            let minSnow = Math.floor(lastForecast.cumLow)
+            let numSnowflakes = Math.floor(maxSnow / 6) + 1;
+            snowIcons = `<i class='fas fa-snowflake' style="font-size: 35px; margin: 0 5px; color: blue;"></i>`.repeat(numSnowflakes);
+
+            snowMessage = `${snowIcons}${numSnowflakes <= 1 ? '' : '<br/>'}${minSnow}-${maxSnow} inches expected${maxSnow >= 6 ? '!' : ""}`
         }
 
         let title = createElement({ tag: 'h2', parent: modal, options: { text: snowMessage, className: 'snow-message' } });
 
+        let maxTemp = Math.max(...forecast.data.temperature.map(x => parseInt(x)))
 
-        let location = createElement({ tag: 'h4', parent: modal, options: { text: `${forecast.location.areaDescription} at ${forecast.location.elevation} ft.` } });
+        let maxTempIndex = forecast.data.temperature.indexOf(maxTemp.toString())
+
+        let maxTempDay = forecast.time.startPeriodName[maxTempIndex]
+
+        let tempIcon = this.getTemperatureIcon(maxTemp);
+        let textColor = this.colorScale(maxTemp);
+
+        createElement({ tag: 'h4', parent: modal, options: { text: `Forecast Elevation: ${forecast.location.elevation} ft.`, style: `margin: 5px;` } });
+
+        let tempText = `${tempIcon} High of ${maxTemp}&deg;F on ${maxTempDay}`.replace(/on (This Afternoon|This Evening|Today|Tonight|This Morning)/i, '$1');
+        
+        createElement({ tag: 'h4', parent: modal, options: { text: tempText, style: `color: ${textColor}; margin-top:0;` } });
 
 
         let overview = new CreateElement({ tag: 'div', parentElement: modal, options: { className: 'weather-display' } })

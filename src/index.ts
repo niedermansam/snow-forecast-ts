@@ -11,6 +11,7 @@ import * as L from 'leaflet';
 import { handleWeatherData } from './components/getWeatherForecast';
 import * as wNumb from 'wnumb';
 import { SnotelData } from './components/getSnoTel';
+import { helpModal } from './components/helpModal';
 
 const app = document.getElementById('app')
 let resorts = Resorts()
@@ -32,6 +33,15 @@ export const resortsLayerGroup = new L.LayerGroup([markers]);
 let headerElement = new CreateElement({ tag: 'div', parentElement: app, options: { id: 'header' } })
 let menuToggle = headerElement.createChild({ tag: 'div', options: { className: "menu-icon change" } })
 let headerText = headerElement.createChild({tag:'h1', options: {text: "Snow Finder"}})
+
+let helpText = '<i class="fas fa-info-circle"></i> help'
+
+let helpButton = headerElement.createChild({tag: 'p', 
+    options: {text: helpText, style: 'margin: 0; position: absolute; right: 10px; cursor: pointer;'}})
+
+helpButton.self.addEventListener('click', () => {
+    helpModal()
+})
 
 menuToggle.createChild({tag: 'div', options: {className: "bar1"}})
     .createSibling({ tag: 'div', options: { className: "bar2" } })
