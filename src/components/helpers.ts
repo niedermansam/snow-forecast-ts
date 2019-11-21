@@ -134,6 +134,18 @@ export class CreateElement {
 
         return {container: container, switch: uiSwitch};
     }
+
+    createAlert(text: string, type: "warning" | "danger" = "warning", icon: string = "fas fa-exclamation-circle"){
+        let container = this.createChild({
+            tag: 'div', options: {
+                text: `<i class="${icon}" style="margin-right: 10px"></i>`, 
+                className: `alert alert-${type}`, 
+                style: 'display: flex; align-items: center;' 
+            }
+        }).createChild({ tag: 'p', options: { text: text, style: 'margin: 0;' }})
+        container.createChild
+        //, options: { text: `<i class="fas fa-exclamation-circle" style="margin-right: 10px"></i> <div>Backcountry travel is inherently dangerous. Ski and ride safe!</div>`, className: 'alert alert-danger', style: 'display: flex; align-items: center;' } })
+    }
 }
 
 

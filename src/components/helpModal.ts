@@ -16,22 +16,22 @@ export const helpModal = () => {
 
     modal.createChild({ tag: 'h1', options: { text: "Welcome to Snow Finder", style: "margin-top: -1em" } })
 
+    modal.createAlert("Backcountry travel is inherently dangerous. Ski and ride safe!", "danger")
+
     modal.createChild({ tag: 'p', options: { text: "Our goal is to make tracking snow storms and pow days as easy as possible." } })
 
-    modal.createChild({ tag: 'h2', options: { text: "Getting and Sharing Forecasts" } })
+    modal.createChild({ tag: 'p', options: { text: "The snow finder saves the map view and forecast locations in the URL so you can easily save forecasts for your favorite pow stash, or share your current view with your friends." } })
+
+    modal.createChild({ tag: 'h2', options: { text: "Getting Forecasts" } })
+
+    modal.createAlert('We currently only support forecasts in the United States.', 'warning')
 
     modal.createChild({ tag: 'p', options: { text: "Click on the map and a popup will appear with forecast information from the National Weather Service." } })
 
+    modal.createChild({ tag: 'p', options: { text: `Click the <button class="forecast-details-button" type="button">Details</button> button on the forecast popup to view a more detailed forecast.` } })
 
-    modal.createChild({ tag: 'p', options: { text: `<i class="fas fa-exclamation-circle"></i> We currently only support forecasts in the United States.`, className: 'alert alert-warning' } })
+    modal.createChild({ tag: 'p', options: { text: `Click the <button class="remove-forecast-button" type="button">Remove</button> button on the forecast popup to remove the forecast from the map.` } })
 
-    modal.createChild({ tag: 'p', options: { text: "Click the 'Details' button on the forecast popup to view a more detailed forecast." } })
-
-    modal.createChild({ tag: 'p', options: { text: "Click the 'Remove' button on the forecast popup to remove the forecast from the map." } })
-
-    modal.createChild({ tag: 'p', options: { text: "The location of the forecast will be saved in the URL so you can bookmark or share forecast views." } })
-    
-
-    modal.createChild({ tag: 'p', options: { text: `<i class="fas fa-exclamation-circle" style="margin-right: 10px"></i> <div>Backcountry travel is inherently dangerous. Ski and ride safe!</div>`, className: 'alert alert-danger', style: 'display: flex; align-items: center;' } })
+    //modal.createChild({ tag: 'p', options: { text: "The location of the forecast will be saved in the URL so you can bookmark or share forecast views." } })
 
 }

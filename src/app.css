@@ -160,23 +160,35 @@ input:checked + .slider:before {
   font-weight: bold;
 }
 
-.leaflet-popup-buttons button.forecast-details-button {
+button.forecast-details-button,
+button.remove-forecast-button {
+  width: 100px;
+  cursor: pointer;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid black;
+  -webkit-transition: background .2s, color .2s;
+  transition: background .2s, color .2s;
+  font-weight: bold;
+}
+
+button.forecast-details-button {
   border: 1px solid #519ed4;
   background: #cfe0ec;
 }
 
-.leaflet-popup-buttons button.remove-forecast-button {
+button.remove-forecast-button {
   border: 1px solid red;
   background: #ffd0d0;
 }
 
-.leaflet-popup-buttons button.forecast-details-button:hover, .leaflet-popup-buttons button.forecast-details-button:focus {
+button.forecast-details-button:hover, button.forecast-details-button:focus {
   background: #519ed4;
   color: white;
   outline: none;
 }
 
-.leaflet-popup-buttons button.remove-forecast-button:hover, .leaflet-popup-buttons button.remove-forecast-button:focus {
+button.remove-forecast-button:hover, button.remove-forecast-button:focus {
   background: red;
   color: white;
   outline: none;

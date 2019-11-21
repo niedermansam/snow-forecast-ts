@@ -37,7 +37,7 @@ let headerText = headerElement.createChild({tag:'h1', options: {text: "Snow Find
 let helpText = '<i class="fas fa-info-circle"></i> help'
 
 let helpButton = headerElement.createChild({tag: 'p', 
-    options: {text: helpText, style: 'margin: 0; position: absolute; right: 10px; cursor: pointer;'}})
+    options: {text: helpText, style: 'margin: 0; margin-left: auto; cursor: pointer;'}})
 
 helpButton.self.addEventListener('click', () => {
     helpModal()
