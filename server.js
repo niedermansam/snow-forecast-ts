@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const https = require('https');
+const fs = require('fs')
 
 const soap = require('soap');
 
@@ -213,22 +214,13 @@ app.get('/api/snotel', (req, res) => {
 
 
 if (process.env.NODE_ENV === "production") {
-    const privateKey = fs.readFileSync('/etc/letsencrypt/live/snowfinder.site/privkey.pem', 'utf8');
-    const certificate = fs.readFileSync('/etc/letsencrypt/live/snowfinder.site/cert.pem', 'utf8');
-    const ca = fs.readFileSync('/etc/letsencrypt/live/snowfinder.site/chain.pem', 'utf8');
-    const credentials = {
-        key: privateKey,
-        cert: certificate,
-        ca: ca
-    };
-
-    https.createServer(credentials, app).listen(443, () => {
-        console.log('HTTPS Server running on port 443');
-    });
-    http.createServer(function (req, res) {
-        res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
-        res.end();
-    }).listen(80);
+    https.createServer({
+        key: fs.readFileSync('/etc/letsencrypt/path/to/key.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/path/to/cert.pem'),
+        ca: fs.readFileSync('/etc/letsencrypt/path/to/chain.pem')
+    }, app).listen(443, () => {
+        console.log('Listening...')
+    })
 } else if (process.env.NODE_ENV === "development") {
     app.listen(9000);
 } else {
