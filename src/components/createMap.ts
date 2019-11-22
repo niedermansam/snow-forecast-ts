@@ -150,7 +150,7 @@ export const resortPopups = (feature: Feature<Geometry, any>, layer:L.Layer):voi
     
     let vert= feature.properties.vertical ? feature.properties.vertical + " Vertical Ft.<br/>" : "";
     
-    let popupContent = `<strong><a href='${feature.properties.url}' target='_blank'>${feature.properties.name}</a></strong><br/>
+    let popupContent = `<strong>${feature.properties.name}</strong><br/>
      ${vert} ${acres} ${lifts} <br/> <strong>${price}</strong>`;
     //'name: ' + String(feature.properties['name']) + '<br>pop_max: ' + String(feature.properties['vertical']);
     
