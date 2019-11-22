@@ -54,6 +54,7 @@ let toolbar = createToolBar(markers, app, resorts);
 if(window.innerWidth <= 800){
     toolbar.classList.add("hidden")
     menuToggle.self.classList.remove("change")
+    document.querySelector('.leaflet-control-attribution').classList.remove('menu-hidden');
 }
 
 menuToggle.self.addEventListener('click',e => {
