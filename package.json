@@ -39,7 +39,13 @@
   "description": "",
   "dependencies": {
     "@types/d3": "^5.7.2",
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
     "d3": "^5.12.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "geojson": "^0.5.0",
     "glyphicons": "^0.2.0",
@@ -48,7 +54,10 @@
     "leaflet": "^1.5.1",
     "leaflet-timedimension": "^1.1.0",
     "leaflet.awesome-markers": "^2.0.5",
+    "mongodb": "^3.3.4",
+    "mongoose": "^5.7.12",
     "nouislider": "^14.0.3",
+    "soap": "^0.30.0",
     "wnumb": "^1.1.0"
   }
 }
