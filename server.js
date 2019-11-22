@@ -211,6 +211,8 @@ app.get('/api/snotel', (req, res) => {
     }
 });*/
 
+app.listen(9000);
+/*
 if (process.env.NODE_ENV === "production") {
     const privateKey = fs.readFileSync('/etc/letsencrypt/live/snowfinder.site/privkey.pem', 'utf8');
     const certificate = fs.readFileSync('/etc/letsencrypt/live/snowfinder.site/cert.pem', 'utf8');
@@ -233,3 +235,4 @@ if (process.env.NODE_ENV === "production") {
 } else {
     app.listen(9000);
 }
+*/
