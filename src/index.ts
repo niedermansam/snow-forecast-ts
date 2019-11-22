@@ -51,6 +51,11 @@ menuToggle.createChild({tag: 'div', options: {className: "bar1"}})
 let toolbar = createToolBar(markers, app, resorts);
 //let filters = createFilters(markers, toolbar, resorts);
 
+if(window.innerWidth <= 800){
+    toolbar.classList.add("hidden")
+    menuToggle.self.classList.remove("change")
+}
+
 menuToggle.self.addEventListener('click',e => {
     menuToggle.self.classList.toggle('change');
     toolbar.classList.toggle('hidden');
