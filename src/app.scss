@@ -80,6 +80,7 @@ td, tr{
     grid-area: header;
     padding: 0 10px;
     margin: 0;
+    z-index: 1100;
     background: $darker-blue;
     color: $text-blue;
     display: flex;

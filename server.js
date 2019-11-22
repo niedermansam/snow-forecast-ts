@@ -213,16 +213,10 @@ app.get('/api/snotel', (req, res) => {
 });*/
 
 
-if (process.env.NODE_ENV === "production") {
-    https.createServer({
-        key: fs.readFileSync('/etc/letsencrypt/path/to/key.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/path/to/cert.pem'),
-        ca: fs.readFileSync('/etc/letsencrypt/path/to/chain.pem')
-    }, app).listen(443, () => {
-        console.log('Listening...')
-    })
-} else if (process.env.NODE_ENV === "development") {
-    app.listen(9000);
-} else {
-    app.listen(9000);
-}
+http.createServer(app).listen(80)
+/*
+ https.createServer({
+        key: fs.readFileSync('/etc/letsencrypt/live/snowfinder.site/privkey.pem'),
+        cert: fs.readFileSync('/etc/letsencrypt/live/snowfinder.site/fullchain.pem')
+    }, app).listen(443)
+*/
