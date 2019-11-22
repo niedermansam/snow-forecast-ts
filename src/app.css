@@ -606,7 +606,7 @@ td, tr {
   grid-area: header;
   padding: 0 10px;
   margin: 0;
-  z-index: 1100;
+  z-index: 1000;
   background: #155f94;
   color: #cfe0ec;
   display: -webkit-box;
