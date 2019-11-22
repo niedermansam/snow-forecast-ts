@@ -28,7 +28,7 @@ let metadataSchema = new Schema({
 })
 const METADATA = mongoose.model('snotel', metadataSchema);
 
-app.use(express.static('dist'));
+app.use(express.static('dist', { dotfiles: 'allow' }));
 
 const url = 'https://www.wcc.nrcs.usda.gov/awdbWebService/services?WSDL'; 
 
