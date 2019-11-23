@@ -55,6 +55,7 @@ if(window.innerWidth <= 800){
     toolbar.classList.add("hidden")
     menuToggle.self.classList.remove("change")
     document.querySelector('.leaflet-control-attribution').classList.add('menu-hidden');
+    document.querySelector('.leaflet-control-zoom').classList.add('menu-hidden');
 }
 
 menuToggle.self.addEventListener('click',e => {
