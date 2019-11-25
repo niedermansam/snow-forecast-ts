@@ -2,7 +2,6 @@ module.exports = (app) => {
 
     const soap = require('soap');
     const axios = require('axios');
-    const csv = require('csv-parse')
 
     const mongoose = require("mongoose");
     const URI = 'mongodb+srv://public:public@snowfinder-h8uzj.mongodb.net/snotel?retryWrites=true&w=majority';
