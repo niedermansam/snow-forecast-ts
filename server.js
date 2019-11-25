@@ -1,7 +1,8 @@
 
 
 
-const snotel = require('./api/snotel')
+const snotel = require('./api/snotel');
+const maps = require('./api/skiMaps');
 const express = require('express');
 const app = express();
 
@@ -21,6 +22,7 @@ app.get('/', function (req, res) {
 });
 
 snotel(app);
+maps(app)
 
 
 http.createServer(app).listen(80)

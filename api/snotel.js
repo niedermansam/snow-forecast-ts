@@ -223,7 +223,8 @@ module.exports = (app) => {
     }
 
     app.get('/api/snotel/nearest', async (req, res) => {
-        const { lat, lng, n } = req.query;
+        let { lat, lng, n } = req.query;
+        n = n || 3;
         let query = METADATA.find({}, '-_id -__v')
 
         query.exec(function (err, metadata) {
