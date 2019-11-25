@@ -66,6 +66,6 @@ menuToggle.self.addEventListener('click',e => {
 
 })
 
-const filterSection = markerFilterSection(toolbar, markers, resorts)
 
-let bottomText= createBottomText(toolbar)
+const filterSection = markerFilterSection(toolbar, markers, resorts)
+//let bottomText= createBottomText(toolbar)
