@@ -1,12 +1,13 @@
 module.exports = (app) => {
     const mongoose = require('mongoose')
-    const URI = 'mongodb+srv://niedermansam:Vey7CFh7M8J42s1DU@snowfinder-h8uzj.mongodb.net/resorts?retryWrites=true&w=majority';
+    const URI = require('./../setup/mongoString')('resorts');
     mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true });
     mongoose.set('useCreateIndex', true);
 
     const SKIMAP = require('./schemas/skiMapSchema.js')()
 
     app.get('/api/maps', (req, res) => {
+        console.log(URI)
         SKIMAP.find({}, '-_id, -__v',(err, data) => {
             if(err) console.log(err);
             res.json(data)
