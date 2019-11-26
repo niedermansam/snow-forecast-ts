@@ -34,14 +34,16 @@ module.exports = (app) => {
                 function (err, data) {
                     if(err) return console.log(err)
                     // Tada! random user
-                    let { name, latitude, longitude, maps, official_website} = data;
+                    let { name, latitude, longitude, maps, official_website, id, tags} = data;
                     console.log(data)
                     res.json({
                         name: name,
+                        id: id,
                         lat: latitude,
                         lng: longitude,
                         site: official_website,
-                        maps: maps
+                        maps: maps, 
+                        tags: tags
                     })
                 })
         })
@@ -89,6 +91,6 @@ module.exports = (app) => {
 
     app.get('/test', async (req, res) => {
         // axios.post('/api/maps/vote', { resortId: "6", mapId: "14347"})
-        res.json({"message": "Move along, nothing to see here..."})
+        res.json({"message": "Move along, nothing to see here...."})
     })
 }
