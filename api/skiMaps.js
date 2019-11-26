@@ -1,6 +1,7 @@
 module.exports = (app) => {
     const mongoose = require('mongoose')
     const axios = require('axios')
+    const express = require('express')
     const URI = require('./../setup/mongoString')('resorts');
     mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
     mongoose.set('useCreateIndex', true);
@@ -8,7 +9,7 @@ module.exports = (app) => {
     const bodyParser = require('body-parser');
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
-
+    app.use(express.json());
 
     const SKIMAP = require('./schemas/skiMapSchema.js')()
 
@@ -49,7 +50,7 @@ module.exports = (app) => {
         })
     })
     
-    app.post('/api/maps/vote', (req, res) => {
+    app.route('/api/maps/vote').post((req, res) => {
         console.log('voting')
         console.log(req.body)
         let { resortId, mapId } = req.body;
@@ -90,7 +91,7 @@ module.exports = (app) => {
     })
 
     app.get('/test', async (req, res) => {
-        // axios.post('/api/maps/vote', { resortId: "6", mapId: "14347"})
+        axios.post('/api/maps/vote', { resortId: "6", mapId: "14347"})
         res.json({"message": "Move along, nothing to see here...."})
     })
 }
