@@ -18,6 +18,8 @@ module.exports = () => {
         lift_count: Number,
         run_count: Number,
         maps: [Object],
+        votes: Number,
+        display_map: Object,
         num_maps: Number,
         tags: [mongoose.Schema.Types.Mixed],
         ski_maps:
